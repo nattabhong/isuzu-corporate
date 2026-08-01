@@ -21,7 +21,7 @@ export function Team() {
   const [formPhone, setFormPhone] = useState('')
   const [formRole, setFormRole] = useState<'manager' | 'sales_rep'>('sales_rep')
   const [formTerritory, setFormTerritory] = useState('')
-  const [formSalesTarget, setFormSalesTarget] = useState<number>(5000000)
+  const [formSalesTarget, setFormSalesTarget] = useState<number>(5)
 
   // Reassign Form State
   const [reassignFromId, setReassignFromId] = useState('')
@@ -217,7 +217,7 @@ export function Team() {
     setFormPhone(member.phone || '')
     setFormRole(member.role)
     setFormTerritory(member.territory || '')
-    setFormSalesTarget(member.salesTarget || 5000000)
+    setFormSalesTarget(member.salesTarget || 5)
   }
 
   const resetForm = () => {
@@ -227,7 +227,7 @@ export function Team() {
     setFormPhone('')
     setFormRole('sales_rep')
     setFormTerritory('')
-    setFormSalesTarget(5000000)
+    setFormSalesTarget(5)
   }
 
   const filteredMembers = members.filter((m) => {
@@ -368,7 +368,7 @@ export function Team() {
                       <td>
                         <div className="target-cell">
                           <Target size={14} className="target-icon" />
-                          <span>{(member.salesTarget || 5000000).toLocaleString()} บาท/เดือน</span>
+                          <span>{(member.salesTarget || 5).toLocaleString()} คัน/เดือน</span>
                         </div>
                       </td>
                       <td>
@@ -480,10 +480,11 @@ export function Team() {
                 />
               </div>
               <div className="form-group full-width">
-                <label>เป้าหมายยอดขายรายเดือน (Target Quota - บาท)</label>
+                <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
                 <input
                   type="number"
-                  step={100000}
+                  min={1}
+                  step={1}
                   value={formSalesTarget}
                   onChange={(e) => setFormSalesTarget(Number(e.target.value))}
                 />
@@ -545,10 +546,11 @@ export function Team() {
                 />
               </div>
               <div className="form-group full-width">
-                <label>เป้าหมายยอดขายรายเดือน (Target Quota - บาท)</label>
+                <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
                 <input
                   type="number"
-                  step={100000}
+                  min={1}
+                  step={1}
                   value={formSalesTarget}
                   onChange={(e) => setFormSalesTarget(Number(e.target.value))}
                 />
