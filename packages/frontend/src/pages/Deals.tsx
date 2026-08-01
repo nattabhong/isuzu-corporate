@@ -34,12 +34,12 @@ interface Customer {
 }
 
 const STAGES: { key: string; label: string }[] = [
-  { key: 'lead', label: 'Lead' },
-  { key: 'visit_done', label: 'Visit Done' },
-  { key: 'quote_sent', label: 'Quote Sent' },
-  { key: 'negotiating', label: 'Negotiating' },
-  { key: 'won', label: 'Won' },
-  { key: 'lost', label: 'Lost' },
+  { key: 'lead', label: 'ลูกค้าเป้าหมาย' },
+  { key: 'visit_done', label: 'เข้าพบแล้ว' },
+  { key: 'quote_sent', label: 'ส่งใบเสนอราคาแล้ว' },
+  { key: 'negotiating', label: 'กำลังเจรจา' },
+  { key: 'won', label: 'ปิดการขายสำเร็จ' },
+  { key: 'lost', label: 'เสียโอกาส' },
 ]
 
 const ISUZU_MODELS = [

@@ -138,7 +138,7 @@ describe('Deals Kanban', () => {
       render(<Deals />)
       await waitForLoad()
 
-      const stages = ['Lead', 'Visit Done', 'Quote Sent', 'Negotiating', 'Won', 'Lost']
+      const stages = ['ลูกค้าเป้าหมาย', 'เข้าพบแล้ว', 'ส่งใบเสนอราคาแล้ว', 'กำลังเจรจา', 'ปิดการขายสำเร็จ', 'เสียโอกาส']
       for (const stage of stages) {
         expect(screen.getByText(stage)).toBeInTheDocument()
       }
@@ -209,8 +209,8 @@ describe('Deals Kanban', () => {
 
       render(<Deals />)
 
-      // Should render Lead column
-      const leadCol = await screen.findByText('Lead')
+      // Should render ลูกค้าเป้าหมาย column
+      const leadCol = await screen.findByText('ลูกค้าเป้าหมาย')
       expect(leadCol).toBeInTheDocument()
 
       // Should show empty messages in columns
