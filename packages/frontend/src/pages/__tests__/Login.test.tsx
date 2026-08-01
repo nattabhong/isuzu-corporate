@@ -29,6 +29,6 @@ describe('Login', () => {
   it('renders a descriptive subtitle in Thai', () => {
     render(<Login onLogin={vi.fn()} />)
 
-    expect(screen.getByText(/ระบบบริหารการขายสำหรับทีมขายองค์กร/i)).toBeInTheDocument()
+    expect(screen.getByText('ระบบบริหารการขายและการดูแลลูกค้าองค์กร')).toBeInTheDocument()
   })
 })
