@@ -2732,11 +2732,40 @@ body {
   }
 
   .topbar {
-    padding: 12px 16px;
+    padding: 0 14px;
+    height: 56px;
+    min-height: 56px;
+  }
+
+  .topbar-brand-title {
+    display: none;
+  }
+
+  .logout-text {
+    display: none;
+  }
+
+  .btn-logout {
+    padding: 7px 10px;
+    border-radius: 10px;
+  }
+
+  .user-email {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .table-responsive,
+  .data-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
   }
 
   .page {
-    padding: 16px;
+    padding: 16px 16px 84px 16px;
   }
 
   .login-card {
@@ -2750,14 +2779,15 @@ body {
   }
 
   .modal-overlay {
-    padding: 16px;
+    padding: 0;
     align-items: flex-end;
   }
 
   .modal,
   .modal-content,
   .call-form-panel {
-    border-radius: 20px 20px 0 0;
-    max-height: 85vh;
+    border-radius: 24px 24px 0 0;
+    max-height: 88vh;
+    width: 100%;
   }
 }
