@@ -1,0 +1,24 @@
+name = "isuzu-corporate-api"
+main = "src/index.ts"
+compatibility_date = "2024-07-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "isuzu-corporate-db"
+database_id = "c923da29-735b-4c6b-8379-74bf2fe3f206"
+
+# R2: enable in Dashboard first, then uncomment:
+# [[r2_buckets]]
+# binding = "STORAGE"
+# bucket_name = "isuzu-corporate-files"
+
+[vars]
+LINE_CHANNEL_ID = ""
+LINE_CHANNEL_SECRET = ""
+LINE_CHANNEL_ACCESS_TOKEN = ""
+JWT_SECRET = ""
+GOOGLE_MAPS_API_KEY = ""
+MCP_API_KEY = ""
+
+[env.production]
+# Override for production

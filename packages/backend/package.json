@@ -1,0 +1,31 @@
+{
+  "name": "@isuzu-corporate/backend",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply isuzu-corporate-db",
+    "db:seed": "echo 'Seed script not yet implemented — see Task 2'"
+  },
+  "dependencies": {
+    "@isuzu-corporate/shared": "workspace:*",
+    "@libsql/client": "^0.8.0",
+    "drizzle-orm": "^0.33.0",
+    "hono": "^4.5.0",
+    "jose": "^5.6.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240701.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "better-sqlite3": "^13.0.2",
+    "drizzle-kit": "^0.24.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0",
+    "wrangler": "^3.70.0"
+  }
+}
