@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Users, Settings, Truck } from 'lucide-react'
 
 interface SidebarProps {
-  role: 'manager' | 'sales_rep'
+  role: 'admin' | 'manager' | 'sales_rep'
 }
 
 const commonItems = [

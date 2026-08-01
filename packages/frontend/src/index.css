@@ -2668,9 +2668,16 @@ body {
 /* ===== Settings Page ===== */
 .settings-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 28px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 24px;
   margin-top: 24px;
+  align-items: start;
+}
+
+/* Integration card spans full width bottom row */
+.settings-card.full-width {
+  grid-column: 1 / -1;
 }
 
 .settings-card {
@@ -2757,7 +2764,9 @@ body {
 .info-label {
   display: block;
   font-size: 0.75rem;
-  color: var(--fg-3);
+  color: var(--muted);
+  margin-bottom: 2px;
+  line-height: 1.4;
 }
 
 .info-value {
@@ -2765,6 +2774,21 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--fg);
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.code-font {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.8125rem !important;
+  font-weight: 500 !important;
+  background: #F3F4F6;
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: #374151 !important;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  letter-spacing: 0;
 }
 
 .password-form {
@@ -2853,7 +2877,85 @@ body {
   cursor: pointer;
 }
 
-/* ===== Mobile Responsive Navigation & Layouts ===== */
+/* ===== Integration Section ===== */
+.integration-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.integration-status-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-pill.active {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.status-pill.active::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #059669;
+}
+
+.integration-subtitle {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.integration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.integration-grid .info-item {
+  background: #F9FAFB;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ===== Settings Responsive ===== */
+@media (max-width: 1100px) {
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .integration-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 @media (max-width: 768px) {
   .dashboard-layout,
   .layout {

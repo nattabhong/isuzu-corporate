@@ -5,7 +5,7 @@ import type { AuthUser } from '../hooks/useAuth'
 
 interface LayoutProps {
   user?: AuthUser
-  role?: 'manager' | 'sales_rep'
+  role?: 'admin' | 'manager' | 'sales_rep'
   onLogout?: () => void
   children: ReactNode
 }

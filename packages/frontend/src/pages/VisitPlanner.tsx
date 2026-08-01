@@ -17,7 +17,7 @@ export interface VisitPlanRow {
 }
 
 interface VisitPlannerProps {
-  userRole: 'manager' | 'sales_rep'
+  userRole: 'admin' | 'manager' | 'sales_rep'
   initialPlans?: VisitPlanRow[]
 }
 

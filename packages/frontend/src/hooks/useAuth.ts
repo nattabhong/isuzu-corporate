@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 export interface AuthUser {
   id: string
   name: string
-  role: 'manager' | 'sales_rep'
+  role: 'admin' | 'manager' | 'sales_rep'
   email?: string
   phone?: string
   territory?: string

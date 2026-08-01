@@ -1,7 +1,7 @@
 import { VisitPlanner } from './VisitPlanner'
 
 interface VisitsProps {
-  userRole: 'manager' | 'sales_rep'
+  userRole: 'admin' | 'manager' | 'sales_rep'
 }
 
 export function Visits({ userRole }: VisitsProps) {

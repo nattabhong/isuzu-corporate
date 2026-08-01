@@ -27,7 +27,7 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
         <Route path="/visits" element={<Visits userRole={user.role} />} />
         <Route path="/calls" element={<CallPlanner />} />
         <Route path="/deals" element={<Deals userRole={user.role} />} />
-        {user.role === 'manager' && (
+        {(user.role === 'manager' || user.role === 'admin') && (
           <>
             <Route path="/team" element={<Team />} />
             <Route path="/reports" element={<Reports />} />

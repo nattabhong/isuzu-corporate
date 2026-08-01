@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { User, Lock, ShieldCheck, KeyRound, Bell, Building2, CheckCircle2, AlertCircle, Phone, MapPin, Mail } from 'lucide-react'
+import { User, Lock, ShieldCheck, KeyRound, Bell, Building2, CheckCircle2, AlertCircle, Phone, Mail } from 'lucide-react'
 import type { AuthUser } from '../hooks/useAuth'
 
 interface SettingsProps {
@@ -14,7 +14,6 @@ export function Settings({ user }: SettingsProps) {
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
 
-  // Notification Toggles State
   const [notifyVisit, setNotifyVisit] = useState(true)
   const [notifyDeal, setNotifyDeal] = useState(true)
 
@@ -34,7 +33,7 @@ export function Settings({ user }: SettingsProps) {
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError('รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน')
+      setPasswordError('รหัสผ่านใหม่และการยืนยันไม่ตรงกัน')
       return
     }
 
@@ -61,14 +60,17 @@ export function Settings({ user }: SettingsProps) {
     }
   }
 
-  const roleLabel = user?.role === 'manager' ? 'ผู้จัดการ (Manager)' : 'พนักงานขาย (Sales Rep)'
+  const roleLabel =
+    user?.role === 'admin' ? 'ผู้ดูแลระบบ (Admin)' :
+    user?.role === 'manager' ? 'ผู้จัดการ (Manager)' :
+    'พนักงานขาย (Sales Rep)'
 
   return (
     <div className="page settings-page">
       <div className="page-header">
         <div>
-          <h1>ตั้งค่าระบบ (Settings)</h1>
-          <p className="subtitle">จัดการข้อมูลส่วนตัว ความปลอดภัย และการตั้งค่าองค์กร ISUZU Corporate</p>
+          <h1>ตั้งค่า</h1>
+          <p className="subtitle">จัดการข้อมูลส่วนตัว ความปลอดภัย และการตั้งค่าระบบ</p>
         </div>
       </div>
 
@@ -76,44 +78,42 @@ export function Settings({ user }: SettingsProps) {
         {/* Profile Card */}
         <div className="glass-panel settings-card">
           <div className="card-header-with-icon">
-            <User className="card-icon" size={22} />
-            <h2>ข้อมูลส่วนตัว (Profile)</h2>
+            <User className="card-icon" size={20} />
+            <h2>ข้อมูลส่วนตัว</h2>
           </div>
-          <div className="profile-details-grid">
-            <div className="profile-avatar-block">
-              <div className="avatar-circle">
-                <User size={36} />
-              </div>
-              <div className="profile-identity">
-                <span className="profile-name">{user?.name || 'ผู้ใช้งาน'}</span>
-                <span className={`role-badge ${user?.role || 'sales_rep'}`}>
-                  <ShieldCheck size={14} />
-                  <span>{roleLabel}</span>
-                </span>
+          <div className="profile-avatar-block">
+            <div className="avatar-circle">
+              <User size={32} />
+            </div>
+            <div className="profile-identity">
+              <span className="profile-name">{user?.name || 'ผู้ใช้งาน'}</span>
+              <span className={`role-badge ${user?.role || 'sales_rep'}`}>
+                <ShieldCheck size={13} />
+                <span>{roleLabel}</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="info-list">
+            <div className="info-item">
+              <Mail size={15} />
+              <div>
+                <span className="info-label">อีเมล</span>
+                <span className="info-value">{user?.email || '—'}</span>
               </div>
             </div>
-
-            <div className="info-list">
-              <div className="info-item">
-                <Mail size={16} />
-                <div>
-                  <span className="info-label">อีเมล (Email)</span>
-                  <span className="info-value">{user?.email || 'nattabhong.kon@gmail.com'}</span>
-                </div>
+            <div className="info-item">
+              <ShieldCheck size={15} />
+              <div>
+                <span className="info-label">ตำแหน่ง</span>
+                <span className="info-value">{roleLabel}</span>
               </div>
-              <div className="info-item">
-                <ShieldCheck size={16} />
-                <div>
-                  <span className="info-label">ตำแหน่ง (Role)</span>
-                  <span className="info-value">{roleLabel}</span>
-                </div>
-              </div>
-              <div className="info-item">
-                <Phone size={16} />
-                <div>
-                  <span className="info-label">เบอร์โทรศัพท์</span>
-                  <span className="info-value">{user?.phone || '081-234-5678'}</span>
-                </div>
+            </div>
+            <div className="info-item">
+              <Phone size={15} />
+              <div>
+                <span className="info-label">เบอร์โทรศัพท์</span>
+                <span className="info-value">{user?.phone || '—'}</span>
               </div>
             </div>
           </div>
@@ -122,20 +122,20 @@ export function Settings({ user }: SettingsProps) {
         {/* Change Password Card */}
         <div className="glass-panel settings-card">
           <div className="card-header-with-icon">
-            <Lock className="card-icon" size={22} />
-            <h2>เปลี่ยนรหัสผ่าน (Security)</h2>
+            <Lock className="card-icon" size={20} />
+            <h2>เปลี่ยนรหัสผ่าน</h2>
           </div>
 
           {passwordSuccess && (
             <div className="alert-banner success">
-              <CheckCircle2 size={18} />
+              <CheckCircle2 size={16} />
               <span>{passwordSuccess}</span>
             </div>
           )}
 
           {passwordError && (
             <div className="alert-banner error">
-              <AlertCircle size={18} />
+              <AlertCircle size={16} />
               <span>{passwordError}</span>
             </div>
           )}
@@ -180,32 +180,32 @@ export function Settings({ user }: SettingsProps) {
           </form>
         </div>
 
-        {/* Corporate & Preferences */}
+        {/* Preferences Card */}
         <div className="glass-panel settings-card">
           <div className="card-header-with-icon">
-            <Building2 className="card-icon" size={22} />
-            <h2>การตั้งค่าองค์กรและระบบ (Preferences)</h2>
+            <Building2 className="card-icon" size={20} />
+            <h2>การตั้งค่าระบบ</h2>
           </div>
 
           <div className="preferences-list">
             <div className="preference-item">
               <div className="pref-icon">
-                <KeyRound size={20} />
+                <KeyRound size={18} />
               </div>
               <div className="pref-info">
-                <span className="pref-title">รหัสเชิญลงทะเบียนสมาชิก (Invite Code)</span>
-                <span className="pref-desc">ใช้สำหรับสมาชิกทีมใหม่ในการสมัครเข้าสู่ระบบ</span>
+                <span className="pref-title">รหัสเชิญสมาชิก</span>
+                <span className="pref-desc">ใช้สำหรับสมาชิกใหม่ในการสมัครเข้าสู่ระบบ</span>
               </div>
               <span className="invite-code-tag">ISUZU2026</span>
             </div>
 
             <div className="preference-item">
               <div className="pref-icon">
-                <Bell size={20} />
+                <Bell size={18} />
               </div>
               <div className="pref-info">
-                <span className="pref-title">แจ้งเตือนการนัดหมาย Visit Planner</span>
-                <span className="pref-desc">ส่งการแจ้งเตือนเมื่อถึงกำหนดการเยี่ยมชมลูกค้า</span>
+                <span className="pref-title">แจ้งเตือนการนัดเยี่ยม</span>
+                <span className="pref-desc">แจ้งเตือนเมื่อถึงกำหนดการเยี่ยมลูกค้า</span>
               </div>
               <input
                 type="checkbox"
@@ -217,11 +217,11 @@ export function Settings({ user }: SettingsProps) {
 
             <div className="preference-item">
               <div className="pref-icon">
-                <Bell size={20} />
+                <Bell size={18} />
               </div>
               <div className="pref-info">
-                <span className="pref-title">แจ้งเตือนสถานะดีลใน Pipeline</span>
-                <span className="pref-desc">ส่งการแจ้งเตือนเมื่อดีลมีการเปลี่ยนสถานะขั้นการขาย</span>
+                <span className="pref-title">แจ้งเตือนสถานะดีล</span>
+                <span className="pref-desc">แจ้งเตือนเมื่อดีลเปลี่ยนสถานะในกระบวนการขาย</span>
               </div>
               <input
                 type="checkbox"
@@ -233,37 +233,31 @@ export function Settings({ user }: SettingsProps) {
           </div>
         </div>
 
-        {/* Enterprise Integration Gateway Card */}
+        {/* Enterprise Integration Card — Full Width */}
         <div className="glass-panel settings-card full-width">
           <div className="card-header-with-icon">
-            <Building2 className="card-icon" size={22} />
-            <h2>การเชื่อมต่อระบบภายในองค์กร (Internal Enterprise Integration)</h2>
+            <Building2 className="card-icon" size={20} />
+            <h2>การเชื่อมต่อระบบภายในองค์กร</h2>
           </div>
 
           <div className="integration-banner">
             <div className="integration-status-header">
-              <span className="status-pill active">พร้อมเชื่อมต่อ (Gateway Active)</span>
+              <span className="status-pill active">พร้อมเชื่อมต่อ</span>
               <span className="integration-subtitle">รองรับการเชื่อมต่อกับระบบ ERP / Dealer Management System (DMS) ภายในองค์กร</span>
             </div>
 
             <div className="integration-grid">
               <div className="info-item">
-                <div>
-                  <span className="info-label">API Key สำหรับระบบภายใน (Internal System API Key)</span>
-                  <span className="info-value code-font">isz_live_99f8a42b101c4e97a89f2a01</span>
-                </div>
+                <span className="info-label">API Key ระบบภายใน</span>
+                <span className="info-value code-font">isz_live_99f8a42b101c4e97a89f2a01</span>
               </div>
               <div className="info-item">
-                <div>
-                  <span className="info-label">Webhook URL สรุปดีล/ลูกค้า</span>
-                  <span className="info-value code-font">https://isuzu-corporate.pages.dev/api/integration/webhook</span>
-                </div>
+                <span className="info-label">Webhook URL</span>
+                <span className="info-value code-font">https://isuzu-corporate.pages.dev/api/integration/webhook</span>
               </div>
               <div className="info-item">
-                <div>
-                  <span className="info-label">รหัสอ้างอิงลูกค้าระบบภายใน (External Customer Ref ID)</span>
-                  <span className="info-value">รองรับฟิลด์ External ID (ERP-Ref) แยกตามรายบริษัทลูกค้า</span>
-                </div>
+                <span className="info-label">รหัสอ้างอิงลูกค้าภายใน</span>
+                <span className="info-value">รองรับ External ID (ERP-Ref) แยกตามรายบริษัทลูกค้า</span>
               </div>
             </div>
           </div>
