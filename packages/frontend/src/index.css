@@ -31,7 +31,10 @@
 
 body {
   font-family: var(--font);
-  background: var(--bg);
+  background: radial-gradient(circle at 12% 15%, rgba(220, 38, 38, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 88% 85%, rgba(220, 38, 38, 0.05) 0%, transparent 40%),
+              #F3F4F6;
+  background-attachment: fixed;
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -42,9 +45,12 @@ body {
 }
 
 .panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
 }
 
 /* ===== Page Layout ===== */
@@ -71,20 +77,24 @@ body {
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: var(--accent);
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
   color: var(--accent-text);
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
   font-family: var(--font);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-primary:hover {
-  background: var(--accent-2);
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
 }
 
 .btn-cancel {
@@ -454,28 +464,34 @@ body {
   font-weight: 500;
 }
 
-/* ===== Login Page ===== */
+/* ===== Login Page (Modern Glassmorphism) ===== */
 .login-page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: var(--bg);
+  background: radial-gradient(circle at 18% 18%, rgba(220, 38, 38, 0.14) 0%, transparent 45%),
+              radial-gradient(circle at 82% 82%, rgba(220, 38, 38, 0.10) 0%, transparent 45%),
+              linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
   padding: var(--space-xl);
+  position: relative;
+  overflow: hidden;
 }
 
 .login-card {
   width: 100%;
-  max-width: 420px;
-  padding: 48px 40px;
+  max-width: 440px;
+  padding: 44px 38px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0;
-  box-shadow: 0 2px 16px rgba(26, 27, 30, 0.06);
+  gap: 28px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 20px 45px -15px rgba(220, 38, 38, 0.12), 0 0 0 1px rgba(220, 38, 38, 0.05);
 }
 
 .login-branding {
@@ -483,9 +499,16 @@ body {
 }
 
 .login-logo {
-  margin-bottom: 16px;
+  width: 76px;
+  height: 76px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.9) 0%, rgba(254, 242, 242, 0.6) 100%);
+  border: 1px solid rgba(252, 165, 165, 0.5);
   display: flex;
+  align-items: center;
   justify-content: center;
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.15);
+  margin: 0 auto 16px auto;
 }
 
 .login-branding h1 {
@@ -503,60 +526,37 @@ body {
   line-height: 1.5;
 }
 
-.login-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 32px;
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
-  font-family: var(--font);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.login-button:hover {
-  background: var(--accent-2);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.25);
-}
-
-.login-button:active {
-  transform: translateY(0);
-}
-
-.login-footer {
-  font-size: 0.8125rem;
-  color: var(--muted);
-  margin: 0;
-}
-
 .login-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .login-form .form-group {
   gap: 6px;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-input {
   display: flex;
   align-items: center;
-  gap: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  padding: 0 12px;
+  gap: 10px;
+  border: 1px solid rgba(209, 213, 219, 0.8);
+  background: rgba(249, 250, 251, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 0 14px;
+  border-radius: 12px;
   color: var(--muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-input:focus-within {
-  border-color: var(--accent);
+  border-color: #DC2626;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+  color: #DC2626;
 }
 
 .login-input input {
@@ -567,19 +567,44 @@ body {
   font-family: var(--font);
   font-size: 0.9375rem;
   color: var(--fg);
-  padding: 11px 0;
+  padding: 12px 0;
 }
 
 .login-error {
   font-size: 0.8125rem;
-  color: #C62828;
-  background: #FFEBEE;
-  padding: 8px 12px;
+  color: #B91C1C;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 10px;
+  padding: 10px 14px;
 }
 
 .login-button {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.35);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.45);
+}
+
+.login-button:active {
+  transform: translateY(0);
 }
 
 .login-button:disabled {
@@ -603,7 +628,7 @@ body {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--border);
+  background: rgba(229, 231, 235, 0.8);
 }
 
 .login-button-line {
@@ -611,20 +636,29 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px 24px;
+  padding: 13px 24px;
   width: 100%;
-  background: #06C755;
+  background: linear-gradient(135deg, #06C755 0%, #05A648 100%);
   color: #ffffff;
   border: none;
+  border-radius: 12px;
   font-family: var(--font);
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(6, 199, 85, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .login-button-line:hover {
-  background: #05A648;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(6, 199, 85, 0.35);
+}
+
+.login-footer {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin: 0;
 }
 
 .login-switch {
@@ -2202,72 +2236,79 @@ body {
   color: var(--muted);
 }
 
-/* ===== Sidebar ===== */
+/* ===== Sidebar (Glassmorphism) ===== */
 .sidebar {
-  width: 240px;
-  min-width: 240px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+  width: 250px;
+  min-width: 250px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid rgba(229, 231, 235, 0.8);
   display: flex;
   flex-direction: column;
   padding: 0 0 var(--space-lg) 0;
   height: 100vh;
   position: sticky;
   top: 0;
+  z-index: 20;
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 20px;
+  gap: 12px;
+  padding: 22px 20px;
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--fg);
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+  margin-bottom: 14px;
   letter-spacing: -0.01em;
 }
 
 .sidebar nav ul {
   list-style: none;
-  padding: 0;
+  padding: 0 8px;
   margin: 0;
 }
 
 .sidebar nav li {
-  margin: 0;
+  margin: 2px 0;
 }
 
 .sidebar nav a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 20px;
+  padding: 11px 16px;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--fg-2);
   text-decoration: none;
-  transition: all 0.15s;
-  border-left: 3px solid transparent;
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar nav a:hover {
-  background: var(--bg-2);
+  background: rgba(243, 244, 246, 0.8);
   color: var(--fg);
 }
 
 .sidebar nav a.active {
-  color: var(--accent);
-  background: var(--accent-soft);
-  border-left-color: var(--accent);
+  color: #DC2626;
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.7) 0%, rgba(254, 242, 242, 0.4) 100%);
+  border: 1px solid rgba(252, 165, 165, 0.5);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
 }
 
 /* ===== Layout ===== */
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background: var(--bg);
+  background: radial-gradient(circle at 10% 20%, rgba(220, 38, 38, 0.06) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.04) 0%, transparent 40%),
+              #F3F4F6;
 }
 
 .main-content {
@@ -2276,14 +2317,16 @@ body {
   padding: 0;
 }
 
-/* ===== Top Bar ===== */
+/* ===== Top Bar (Glassmorphism) ===== */
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
   position: sticky;
   top: 0;
   z-index: 10;

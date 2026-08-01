@@ -10,6 +10,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="ISUZU CRM" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>ISUZU Corporate</title>
   </head>
   <body>
@@ -17,15 +20,20 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
+        // Unregister any old service worker cache to ensure instant UI update
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (let registration of registrations) {
+            registration.update();
+          }
+        });
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(
+          navigator.serviceWorker.register('/sw.js?v=' + Date.now()).then(
             (registration) => {
-              console.log('SW registered:', registration.scope)
-            },
-            (err) => {
-              console.log('SW registration failed:', err)
+              registration.update();
             }
-          )
+          ).catch((err) => {
+            console.log('SW registration error:', err)
+          })
         })
       }
     </script>
