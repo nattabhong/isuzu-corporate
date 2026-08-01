@@ -8,9 +8,9 @@ interface LayoutProps {
 
 export function Layout({ role, children }: LayoutProps) {
   return (
-    <div className="layout">
+    <div className="dashboard-layout">
       <Sidebar role={role} />
-      <main className="content">
+      <main className="main-content">
         {children}
       </main>
     </div>
