@@ -94,7 +94,7 @@ export const createCallLogSchema = z.object({
 // Deal
 export const createDealSchema = z.object({
   customerId: z.string().min(1),
-  vehicleModel: z.enum(ISUZU_MODELS),
+  vehicleModel: z.string().min(1),
   quantity: z.number().min(1),
   expectedAmount: z.number().optional(),
   stage: z.enum(DEAL_STAGES).default('lead'),
@@ -106,7 +106,7 @@ export const createDealSchema = z.object({
 
 export const updateDealSchema = z.object({
   customerId: z.string().optional(),
-  vehicleModel: z.enum(ISUZU_MODELS).optional(),
+  vehicleModel: z.string().optional(),
   quantity: z.number().min(1).optional(),
   expectedAmount: z.number().optional(),
   expectedCloseDate: z.string().optional(),

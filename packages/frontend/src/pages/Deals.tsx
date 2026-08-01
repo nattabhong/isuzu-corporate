@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, X } from 'lucide-react'
 import { api } from '../lib/api'
+import { ISUZU_OFFICIAL_LINEUP } from '@isuzu-corporate/shared'
 
 interface Deal {
   id: string
@@ -68,13 +69,29 @@ export function Deals({ userRole }: DealsProps = {}) {
 
   // Form state
   const [formCustomerId, setFormCustomerId] = useState('')
-  const [formModel, setFormModel] = useState(ISUZU_MODELS[0])
+  const [formModel, setFormModel] = useState(ISUZU_OFFICIAL_LINEUP[0].name)
   const [formQuantity, setFormQuantity] = useState(1)
-  const [formAmount, setFormAmount] = useState('')
+  const [formAmount, setFormAmount] = useState(String(ISUZU_OFFICIAL_LINEUP[0].price))
   const [formCloseDate, setFormCloseDate] = useState('')
   const [formNotes, setFormNotes] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
+
+  const handleModelChange = (modelName: string, qty: number = formQuantity) => {
+    setFormModel(modelName)
+    const modelObj = ISUZU_OFFICIAL_LINEUP.find((m) => m.name === modelName)
+    if (modelObj) {
+      setFormAmount(String(modelObj.price * qty))
+    }
+  }
+
+  const handleQuantityChange = (qty: number) => {
+    setFormQuantity(qty)
+    const modelObj = ISUZU_OFFICIAL_LINEUP.find((m) => m.name === formModel)
+    if (modelObj) {
+      setFormAmount(String(modelObj.price * qty))
+    }
+  }
 
   const fetchDeals = useCallback(async () => {
     try {
@@ -336,25 +353,27 @@ export function Deals({ userRole }: DealsProps = {}) {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>รุ่นรถ</label>
-                  <select value={formModel} onChange={(e) => setFormModel(e.target.value)}>
-                    {ISUZU_MODELS.map((m) => (
-                      <option key={m} value={m}>{m}</option>
+                  <label>รุ่นรถอีซูซุ (Official Lineup)</label>
+                  <select value={formModel} onChange={(e) => handleModelChange(e.target.value)}>
+                    {ISUZU_OFFICIAL_LINEUP.map((m) => (
+                      <option key={m.name} value={m.name}>
+                        {m.name} ({m.formattedPrice})
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>จำนวน</label>
+                  <label>จำนวน (คัน)</label>
                   <input
                     type="number"
                     min="1"
                     value={formQuantity}
-                    onChange={(e) => setFormQuantity(Number(e.target.value))}
+                    onChange={(e) => handleQuantityChange(Math.max(1, Number(e.target.value)))}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label>มูลค่าที่คาดหวัง (฿)</label>
+                  <label>มูลค่าดีลคาดหวัง (฿)</label>
                   <input
                     type="number"
                     value={formAmount}

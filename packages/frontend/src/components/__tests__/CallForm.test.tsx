@@ -244,10 +244,10 @@ describe('CallForm', () => {
     render(<CallForm {...baseProps} />)
     fireEvent.click(screen.getByText('แผนเพิ่ม/เปลี่ยนรถ'))
 
-    expect(screen.getByText('กระบะตอนเดียว')).toBeInTheDocument()
-    expect(screen.getByText('กระบะ 4 ประตู')).toBeInTheDocument()
-    expect(screen.getByText('MU-X')).toBeInTheDocument()
-    expect(screen.getByText('รถบรรทุก')).toBeInTheDocument()
+    expect(screen.getByText('กระบะตอนเดียว (Spark)')).toBeInTheDocument()
+    expect(screen.getByText('กระบะ 4 ประตู (Cab4 / Hi-Lander)')).toBeInTheDocument()
+    expect(screen.getByText('มิว-เอ็กซ์ (MU-X)')).toBeInTheDocument()
+    expect(screen.getByText('รถบรรทุก (Trucks)')).toBeInTheDocument()
   })
 
   it('renders purchase purpose checkboxes', () => {

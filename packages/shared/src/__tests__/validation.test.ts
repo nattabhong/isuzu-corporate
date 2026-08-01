@@ -181,7 +181,7 @@ describe('createCallLogSchema', () => {
       mainProblems: ['รถหยุดวิ่งนาน', 'ค่าใช้จ่ายงานซ่อมสูง'],
       purchaseTimeline: '3m',
       expectedQuantity: 2,
-      interestedModels: ['กระบะ 4 ประตู', 'MU-X'],
+      interestedModels: ['กระบะ 4 ประตู (Cab4 / Hi-Lander)', 'มิว-เอ็กซ์ (MU-X)'],
       purchasePurpose: ['ขยายธุรกิจ'],
       decisionMakers: [{ role: 'MD', namePosition: 'คุณสมชาย — MD' }],
       keyFactors: ['ราคารถ', 'ความประหยัดน้ำมัน', 'บริการหลังการขาย'],

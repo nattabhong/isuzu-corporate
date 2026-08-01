@@ -236,7 +236,7 @@ describe('Deals Routes', () => {
       }).run()
       db.insert(schema.deals).values({
         id: 'deal-2', customerId: 'cust-b', salesRepId: 'rep-2',
-        vehicleModel: 'MU-X 3.0', quantity: 1, expectedAmount: 800000,
+        vehicleModel: 'MU-X 3.0 Ddi RS 4WD A/T', quantity: 1, expectedAmount: 800000,
         stage: 'negotiating',
       }).run()
       db.insert(schema.deals).values({
@@ -382,13 +382,13 @@ describe('Deals Routes', () => {
       expect(res.status).toBe(400)
     })
 
-    it('returns 400 for invalid vehicle model', async () => {
+    it('returns 400 when vehicle model is empty string', async () => {
       const res = await app.request('/api/deals', {
         method: 'POST',
         headers: { ...authHeaders(rep1Token), 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerId: 'cust-a',
-          vehicleModel: 'Invalid Model',
+          vehicleModel: '',
           quantity: 1,
         }),
       }, authEnv(db))
@@ -623,7 +623,7 @@ describe('Deals Routes', () => {
       }).run()
       db.insert(schema.deals).values({
         id: 'deal-2', customerId: 'cust-b', salesRepId: 'rep-2',
-        vehicleModel: 'MU-X 3.0', quantity: 1, expectedAmount: 800000,
+        vehicleModel: 'MU-X 3.0 Ddi RS 4WD A/T', quantity: 1, expectedAmount: 800000,
         stage: 'lead',
       }).run()
       db.insert(schema.deals).values({

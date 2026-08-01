@@ -239,8 +239,8 @@ describe('Deals Kanban', () => {
 
       await screen.findByText('สร้าง Deal ใหม่')
       expect(screen.getByText('ลูกค้า')).toBeInTheDocument()
-      expect(screen.getByText('รุ่นรถ')).toBeInTheDocument()
-      expect(screen.getByText('จำนวน')).toBeInTheDocument()
+      expect(screen.getByText('รุ่นรถอีซูซุ (Official Lineup)')).toBeInTheDocument()
+      expect(screen.getByText('จำนวน (คัน)')).toBeInTheDocument()
     })
 
     it('closes modal when cancel is clicked', async () => {
