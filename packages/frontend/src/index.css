@@ -1,18 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #F7F6F2;
-  --bg-2: #EFEDE8;
+  --bg: #F8F9FA;
+  --bg-2: #F1F3F5;
   --surface: #FFFFFF;
-  --fg: #1A1B1E;
-  --fg-2: #4A4B4F;
-  --muted: #8A8B8F;
-  --accent: #06C755;
-  --accent-2: #059669;
-  --accent-soft: #E8F9EF;
+  --fg: #111827;
+  --fg-2: #374151;
+  --muted: #6B7280;
+  --accent: #CC0000;
+  --accent-2: #A00000;
+  --accent-soft: #FEF2F2;
+  --accent-border: #FCA5A5;
   --accent-text: #FFFFFF;
-  --border: #E8E6E0;
-  --border-2: #F0EEE8;
+  --line-green: #06C755;
+  --border: #E5E7EB;
+  --border-2: #F3F4F6;
   --font: 'Noto Sans Thai', sans-serif;
   --space-xs: 4px;
   --space-sm: 8px;
@@ -519,7 +521,7 @@ body {
 .login-button:hover {
   background: var(--accent-2);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);
+  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.25);
 }
 
 .login-button:active {
@@ -2208,10 +2210,23 @@ body {
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  padding: var(--space-lg) 0;
+  padding: 0 0 var(--space-lg) 0;
   height: 100vh;
   position: sticky;
   top: 0;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
 }
 
 .sidebar nav ul {

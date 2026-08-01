@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Settings } from 'lucide-react'
+import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Settings, Truck } from 'lucide-react'
 
 interface SidebarProps {
   role: 'manager' | 'sales_rep'
@@ -23,6 +23,10 @@ export function Sidebar({ role }: SidebarProps) {
 
   return (
     <aside className="sidebar">
+      <div className="sidebar-brand">
+        <Truck size={22} color="var(--accent)" />
+        <span>ISUZU Corporate</span>
+      </div>
       <nav>
         <ul>
           {items.map((item) => (
