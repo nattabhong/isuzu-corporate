@@ -434,7 +434,6 @@ export function Reports() {
                       <tr>
                         <th>อันดับ</th>
                         <th>เซลล์</th>
-                        <th>เขต</th>
                         <th>Visit สำเร็จ</th>
                         <th>Call สำเร็จ</th>
                         <th>ดีลชนะ</th>
@@ -454,7 +453,6 @@ export function Reports() {
                             )}
                           </td>
                           <td>{row.salesRepName}</td>
-                          <td>{row.territory ?? '—'}</td>
                           <td>{formatCount(row.visitCompleted)}</td>
                           <td>{formatCount(row.callCompleted)}</td>
                           <td>{formatCount(row.dealsWon)}</td>

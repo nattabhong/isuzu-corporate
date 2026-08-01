@@ -321,7 +321,6 @@ export function Team() {
               <tr>
                 <th>สมาชิกทีมงาน</th>
                 <th>ตำแหน่ง (Role)</th>
-                <th>เขตการขาย (Territory)</th>
                 <th>เป้าหมายยอดขาย (Target)</th>
                 <th>สถานะใช้งาน</th>
                 <th style={{ textAlign: 'right' }}>การจัดการ</th>
@@ -330,7 +329,7 @@ export function Team() {
             <tbody>
               {filteredMembers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '32px' }}>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '32px' }}>
                     ไม่พบข้อมูลสมาชิกทีมงาน
                   </td>
                 </tr>
@@ -358,12 +357,6 @@ export function Team() {
                           {member.role === 'manager' ? <ShieldCheck size={12} /> : <UserCheck size={12} />}
                           <span>{roleLabel}</span>
                         </span>
-                      </td>
-                      <td>
-                        <div className="territory-badge">
-                          <MapPin size={13} />
-                          <span>{member.territory || 'ไม่ได้ระบุ'}</span>
-                        </div>
                       </td>
                       <td>
                         <div className="target-cell">
@@ -473,15 +466,6 @@ export function Team() {
                   <option value="manager">ผู้จัดการ (Manager)</option>
                 </select>
               </div>
-              <div className="form-group">
-                <label>เขตพื้นที่การขาย (Territory)</label>
-                <input
-                  type="text"
-                  placeholder="เช่น เชียงใหม่ (ภาคเหนือ)"
-                  value={formTerritory}
-                  onChange={(e) => setFormTerritory(e.target.value)}
-                />
-              </div>
               <div className="form-group full-width">
                 <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
                 <input
@@ -540,14 +524,6 @@ export function Team() {
                   <option value="manager">ผู้จัดการ (Manager)</option>
                 </select>
               </div>
-              <div className="form-group">
-                <label>เขตพื้นที่การขาย (Territory)</label>
-                <input
-                  type="text"
-                  value={formTerritory}
-                  onChange={(e) => setFormTerritory(e.target.value)}
-                />
-              </div>
               <div className="form-group full-width">
                 <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
                 <input
@@ -576,18 +552,19 @@ export function Team() {
         <div className="modal-overlay">
           <div className="modal-content glass-card">
             <div className="modal-header">
-              <h2>รีเซ็ตรหัสผ่าน: {resetPasswordMember.name}</h2>
+              <h2>ตั้งรหัสผ่านใหม่: {resetPasswordMember.name}</h2>
               <button type="button" className="modal-close" onClick={() => setResetPasswordMember(null)}>
                 <X size={18} />
               </button>
             </div>
             <form onSubmit={handleResetPassword} className="password-form">
               <div className="form-group">
-                <label>รหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)</label>
+                <label>กำหนดรหัสผ่านใหม่</label>
                 <input
                   type="password"
                   required
-                  placeholder="••••••••"
+                  minLength={6}
+                  placeholder="ระบุรหัสผ่านอย่างน้อย 6 ตัวอักษร"
                   value={newStaffPassword}
                   onChange={(e) => setNewStaffPassword(e.target.value)}
                 />

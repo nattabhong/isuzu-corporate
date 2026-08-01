@@ -683,7 +683,6 @@ export function Overview({ user }: OverviewProps) {
                 <thead>
                   <tr>
                     <th>ชื่อ</th>
-                    <th>เขต</th>
                     <th>Visit</th>
                     <th>Call</th>
                     <th>ปิดดีล</th>
@@ -693,7 +692,6 @@ export function Overview({ user }: OverviewProps) {
                   {teamPerformance.map((rep) => (
                     <tr key={rep.id}>
                       <td className="td-customer">{rep.name}</td>
-                      <td className="text-muted">{rep.territory}</td>
                       <td>
                         <span className="team-stat">
                           {rep.visitDone}

@@ -115,13 +115,6 @@ export function Settings({ user }: SettingsProps) {
                   <span className="info-value">{user?.phone || '081-234-5678'}</span>
                 </div>
               </div>
-              <div className="info-item">
-                <MapPin size={16} />
-                <div>
-                  <span className="info-label">เขตการขาย (Territory)</span>
-                  <span className="info-value">{user?.territory || 'เชียงใหม่ (ภาคเหนือ)'}</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
