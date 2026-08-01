@@ -19,6 +19,7 @@ LINE_CHANNEL_ACCESS_TOKEN = ""
 JWT_SECRET = ""
 GOOGLE_MAPS_API_KEY = ""
 MCP_API_KEY = ""
+INVITE_CODE = ""
 
 [env.production]
 # Override for production
