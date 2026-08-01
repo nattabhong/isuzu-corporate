@@ -18,6 +18,7 @@ type Env = {
   LINE_CHANNEL_ACCESS_TOKEN: string
   GOOGLE_MAPS_API_KEY: string
   MCP_API_KEY: string
+  INVITE_CODE: string
 }
 
 const app = new Hono<{ Bindings: Env }>()

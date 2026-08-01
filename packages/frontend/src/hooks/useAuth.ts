@@ -24,8 +24,38 @@ export function useAuth() {
       .finally(() => setLoading(false))
   }, [])
 
-  const login = useCallback(() => {
+  const lineLogin = useCallback(() => {
     window.location.href = '/api/auth/line'
+  }, [])
+
+  const login = useCallback(async (email: string, password: string) => {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    const data = await res.json()
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'เข้าสู่ระบบไม่สำเร็จ')
+    }
+    setUser(data.data)
+    return data.data as AuthUser
+  }, [])
+
+  const register = useCallback(async (name: string, email: string, password: string, inviteCode: string) => {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, inviteCode }),
+    })
+    const data = await res.json()
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'สมัครสมาชิกไม่สำเร็จ')
+    }
+    setUser(data.data)
+    return data.data as AuthUser
   }, [])
 
   const logout = useCallback(async () => {
@@ -33,5 +63,5 @@ export function useAuth() {
     setUser(null)
   }, [])
 
-  return { user, loading, login, logout }
+  return { user, loading, lineLogin, login, register, logout }
 }

@@ -127,6 +127,23 @@ export const createTeamMemberSchema = z.object({
   territory: z.string().optional(),
 })
 
+// Auth
+export const loginSchema = z.object({
+  email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
+  password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'),
+})
+
+export const registerSchema = z.object({
+  name: z.string().min(1, 'กรุณากรอกชื่อ'),
+  email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง'),
+  password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'),
+  inviteCode: z.string().min(1, 'กรุณากรอกรหัสเชิญ'),
+})
+
+export const setPasswordSchema = z.object({
+  password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'),
+})
+
 // Visit Plan
 export const createVisitPlanSchema = z.object({
   customerId: z.string().min(1),
@@ -257,6 +274,9 @@ export type CreateVisitLog = z.infer<typeof createVisitLogSchema>
 export type CreateCallLog = z.infer<typeof createCallLogSchema>
 export type CreateDeal = z.infer<typeof createDealSchema>
 export type CreateTeamMember = z.infer<typeof createTeamMemberSchema>
+export type LoginInput = z.infer<typeof loginSchema>
+export type RegisterInput = z.infer<typeof registerSchema>
+export type SetPasswordInput = z.infer<typeof setPasswordSchema>
 export type CreateVisitPlan = z.infer<typeof createVisitPlanSchema>
 export type CreateCallPlan = z.infer<typeof createCallPlanSchema>
 export type CreateContact = z.infer<typeof createContactSchema>

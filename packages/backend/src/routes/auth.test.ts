@@ -6,6 +6,7 @@ import { drizzle } from 'drizzle-orm/better-sqlite3'
 import { sql } from 'drizzle-orm'
 import * as schema from '../db/schema'
 import { authRoutes } from './auth'
+import { hashPassword as hashPasswordForTest } from '../services/password'
 
 // Mock global fetch for LINE API calls
 const mockFetch = vi.fn()
@@ -14,12 +15,14 @@ vi.stubGlobal('fetch', mockFetch)
 const TEST_CHANNEL_ID = 'test-channel-id'
 const TEST_CHANNEL_SECRET = 'test-channel-secret'
 const TEST_JWT_SECRET = 'test-jwt-secret'
+const TEST_INVITE_CODE = 'isuzu-invite-2026'
 
 type TestEnv = {
   DB: D1Database
   JWT_SECRET: string
   LINE_CHANNEL_ID: string
   LINE_CHANNEL_SECRET: string
+  INVITE_CODE: string
 }
 
 function createApp() {
@@ -40,7 +43,8 @@ function createDb() {
       id TEXT PRIMARY KEY,
       line_user_id TEXT NOT NULL UNIQUE,
       name TEXT NOT NULL,
-      email TEXT,
+      email TEXT UNIQUE,
+      password_hash TEXT,
       phone TEXT,
       role TEXT NOT NULL DEFAULT 'sales_rep',
       territory TEXT,
@@ -68,6 +72,7 @@ function env(): TestEnv {
     JWT_SECRET: TEST_JWT_SECRET,
     LINE_CHANNEL_ID: TEST_CHANNEL_ID,
     LINE_CHANNEL_SECRET: TEST_CHANNEL_SECRET,
+    INVITE_CODE: TEST_INVITE_CODE,
   }
 }
 
@@ -424,4 +429,206 @@ describe('Auth Routes', () => {
       expect(body.success).toBe(true)
     })
   })
+
+  describe('POST /api/auth/register', () => {
+    it('registers a new member with valid invite code', async () => {
+      const db = createDb()
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'สมชาย ใจดี',
+          email: 'somchai@isuzu.co.th',
+          password: 'secret123',
+          inviteCode: TEST_INVITE_CODE,
+        }),
+      }, testEnv)
+
+      expect(res.status).toBe(201)
+      const body = await res.json() as { success: boolean; data: { id: string; name: string; role: string } }
+      expect(body.success).toBe(true)
+      expect(body.data.name).toBe('สมชาย ใจดี')
+      expect(body.data.role).toBe('sales_rep')
+
+      // Verify member in DB with hashed password
+      const members = db.select().from(schema.teamMembers).all()
+      expect(members).toHaveLength(1)
+      expect(members[0].email).toBe('somchai@isuzu.co.th')
+      expect(members[0].passwordHash).toContain('pbkdf2$')
+      // Password must NOT be stored in plaintext
+      expect(members[0].passwordHash).not.toContain('secret123')
+
+      // Session created + cookie set
+      const sessions = db.select().from(schema.sessions).all()
+      expect(sessions).toHaveLength(1)
+      const cookies = res.headers.getSetCookie?.() ?? res.headers.get('Set-Cookie')
+      const cookieStr = Array.isArray(cookies) ? cookies.join('; ') : cookies
+      expect(cookieStr).toContain('token=')
+    })
+
+    it('rejects wrong invite code', async () => {
+      const db = createDb()
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Test',
+          email: 'test@isuzu.co.th',
+          password: 'secret123',
+          inviteCode: 'wrong-code',
+        }),
+      }, testEnv)
+
+      expect(res.status).toBe(403)
+      const members = db.select().from(schema.teamMembers).all()
+      expect(members).toHaveLength(0)
+    })
+
+    it('rejects duplicate email', async () => {
+      const db = createDb()
+      db.insert(schema.teamMembers).values({
+        id: 'existing-1',
+        lineUserId: 'email_existing-1',
+        name: 'Existing',
+        email: 'dup@isuzu.co.th',
+        role: 'sales_rep',
+      }).run()
+
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+      const app = createApp()
+      const res = await app.request('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Dup',
+          email: 'DUP@isuzu.co.th',
+          password: 'secret123',
+          inviteCode: TEST_INVITE_CODE,
+        }),
+      }, testEnv)
+
+      expect(res.status).toBe(409)
+    })
+
+    it('rejects invalid email format', async () => {
+      const app = createApp()
+      const res = await app.request('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'Test',
+          email: 'not-an-email',
+          password: 'secret123',
+          inviteCode: TEST_INVITE_CODE,
+        }),
+      }, env())
+
+      expect(res.status).toBe(400)
+    })
+  })
+
+  describe('POST /api/auth/login', () => {
+    async function seedMember(db: ReturnType<typeof createDb>, overrides: Partial<typeof schema.teamMembers.$inferInsert> = {}) {
+      db.insert(schema.teamMembers).values({
+        id: 'login-member-1',
+        lineUserId: 'email_login-member-1',
+        name: 'Login User',
+        email: 'login@isuzu.co.th',
+        passwordHash: await hashPasswordForTest('secret123'),
+        role: 'sales_rep',
+        isActive: true,
+        ...overrides,
+      }).run()
+    }
+
+    it('logs in with correct email and password', async () => {
+      const db = createDb()
+      await seedMember(db)
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'login@isuzu.co.th', password: 'secret123' }),
+      }, testEnv)
+
+      expect(res.status).toBe(200)
+      const body = await res.json() as { success: boolean; data: { id: string; name: string; role: string } }
+      expect(body.success).toBe(true)
+      expect(body.data.name).toBe('Login User')
+      expect(body.data.role).toBe('sales_rep')
+
+      const sessions = db.select().from(schema.sessions).all()
+      expect(sessions).toHaveLength(1)
+    })
+
+    it('rejects wrong password', async () => {
+      const db = createDb()
+      await seedMember(db)
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'login@isuzu.co.th', password: 'wrongpass' }),
+      }, testEnv)
+
+      expect(res.status).toBe(401)
+      const sessions = db.select().from(schema.sessions).all()
+      expect(sessions).toHaveLength(0)
+    })
+
+    it('rejects unknown email', async () => {
+      const db = createDb()
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'nobody@isuzu.co.th', password: 'secret123' }),
+      }, testEnv)
+
+      expect(res.status).toBe(401)
+    })
+
+    it('rejects inactive account', async () => {
+      const db = createDb()
+      await seedMember(db, { isActive: false })
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'login@isuzu.co.th', password: 'secret123' }),
+      }, testEnv)
+
+      expect(res.status).toBe(403)
+    })
+
+    it('normalizes email case before lookup', async () => {
+      const db = createDb()
+      await seedMember(db)
+      const testEnv = { ...env(), DB: db as unknown as D1Database }
+
+      const app = createApp()
+      const res = await app.request('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'LOGIN@ISUZU.CO.TH', password: 'secret123' }),
+      }, testEnv)
+
+      expect(res.status).toBe(200)
+    })
+  })
 })
+

@@ -5,7 +5,9 @@ import { eq } from 'drizzle-orm'
 import { createDb } from '../db'
 import { teamMembers, sessions } from '../db/schema'
 import { exchangeLineCode, getLineProfile } from '../services/line-auth'
+import { hashPassword, verifyPassword } from '../services/password'
 import { authMiddleware } from '../middleware/auth'
+import { loginSchema, registerSchema } from '@isuzu-corporate/shared'
 import type { DbClient } from '../db'
 
 type Env = {
@@ -13,6 +15,7 @@ type Env = {
   JWT_SECRET: string
   LINE_CHANNEL_ID: string
   LINE_CHANNEL_SECRET: string
+  INVITE_CODE: string
 }
 
 function resolveDb(env: Env): DbClient {
@@ -24,7 +27,144 @@ function resolveDb(env: Env): DbClient {
   return createDb(db as D1Database)
 }
 
+async function issueSession(
+  db: DbClient,
+  memberId: string,
+  memberRole: string,
+  memberName: string,
+  jwtSecret: string,
+) {
+  const encoder = new TextEncoder()
+  const token = await new SignJWT({
+    id: memberId,
+    role: memberRole,
+    name: memberName,
+  })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime('1h')
+    .setIssuedAt()
+    .sign(encoder.encode(jwtSecret))
+
+  const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString()
+  db.insert(sessions).values({
+    id: crypto.randomUUID(),
+    teamMemberId: memberId,
+    token,
+    expiresAt,
+  }).run()
+
+  return token
+}
+
 export const authRoutes = new Hono<{ Bindings: Env }>()
+
+// POST /api/auth/register — self-register with invite code
+authRoutes.post('/register', async (c) => {
+  let body: unknown
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ success: false, error: 'ข้อมูลไม่ถูกต้อง' }, 400)
+  }
+
+  const parsed = registerSchema.safeParse(body)
+  if (!parsed.success) {
+    return c.json({ success: false, error: parsed.error.issues[0].message }, 400)
+  }
+
+  const { name, email, password, inviteCode } = parsed.data
+
+  if (inviteCode !== c.env.INVITE_CODE) {
+    return c.json({ success: false, error: 'รหัสเชิญไม่ถูกต้อง' }, 403)
+  }
+
+  const db = resolveDb(c.env)
+  const normalizedEmail = email.toLowerCase()
+
+  // Check email not already used
+  const existing = await db.select().from(teamMembers)
+    .where(eq(teamMembers.email, normalizedEmail))
+    .limit(1)
+    .all()
+  if (existing.length > 0) {
+    return c.json({ success: false, error: 'อีเมลนี้ถูกใช้งานแล้ว' }, 409)
+  }
+
+  const passwordHash = await hashPassword(password)
+  const memberId = crypto.randomUUID()
+
+  db.insert(teamMembers).values({
+    id: memberId,
+    lineUserId: `email_${memberId}`,
+    name,
+    email: normalizedEmail,
+    passwordHash,
+    role: 'sales_rep',
+    isActive: true,
+  }).run()
+
+  const token = await issueSession(db, memberId, 'sales_rep', name, c.env.JWT_SECRET)
+
+  setCookie(c, 'token', token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Lax',
+    path: '/',
+    maxAge: 3600,
+  })
+
+  return c.json({ success: true, data: { id: memberId, name, role: 'sales_rep' } }, 201)
+})
+
+// POST /api/auth/login — email + password
+authRoutes.post('/login', async (c) => {
+  let body: unknown
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ success: false, error: 'ข้อมูลไม่ถูกต้อง' }, 400)
+  }
+
+  const parsed = loginSchema.safeParse(body)
+  if (!parsed.success) {
+    return c.json({ success: false, error: parsed.error.issues[0].message }, 400)
+  }
+
+  const { email, password } = parsed.data
+  const db = resolveDb(c.env)
+  const normalizedEmail = email.toLowerCase()
+
+  const rows = await db.select().from(teamMembers)
+    .where(eq(teamMembers.email, normalizedEmail))
+    .limit(1)
+    .all()
+  const member = rows[0]
+
+  if (!member || !member.passwordHash) {
+    return c.json({ success: false, error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' }, 401)
+  }
+
+  const valid = await verifyPassword(password, member.passwordHash)
+  if (!valid) {
+    return c.json({ success: false, error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' }, 401)
+  }
+
+  if (!member.isActive) {
+    return c.json({ success: false, error: 'บัญชีถูกระงับการใช้งาน' }, 403)
+  }
+
+  const token = await issueSession(db, member.id, member.role, member.name, c.env.JWT_SECRET)
+
+  setCookie(c, 'token', token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Lax',
+    path: '/',
+    maxAge: 3600,
+  })
+
+  return c.json({ success: true, data: { id: member.id, name: member.name, role: member.role } })
+})
 
 // GET /api/auth/line — initiate LINE login
 authRoutes.get('/line', (c) => {

@@ -4,7 +4,7 @@ import { Login } from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
 
 export default function App() {
-  const { user, loading, login, logout } = useAuth()
+  const { user, loading, login, lineLogin, register, logout } = useAuth()
 
   if (loading) {
     return (
@@ -15,7 +15,7 @@ export default function App() {
   }
 
   if (!user) {
-    return <Login onLogin={login} />
+    return <Login onLogin={login} onLineLogin={lineLogin} onRegister={register} />
   }
 
   return (

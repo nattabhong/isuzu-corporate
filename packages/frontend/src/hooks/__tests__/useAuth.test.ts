@@ -78,7 +78,7 @@ describe('useAuth', () => {
     expect(result.current.user).toBeNull()
   })
 
-  it('login redirects to /api/auth/line', () => {
+  it('lineLogin redirects to /api/auth/line', () => {
     const mockFetch = vi.fn().mockImplementation(
       () => new Promise(() => {})
     )
@@ -87,10 +87,59 @@ describe('useAuth', () => {
     const { result } = renderHook(() => useAuth())
 
     act(() => {
-      result.current.login()
+      result.current.lineLogin()
     })
 
     expect(window.location.href).toBe('/api/auth/line')
+  })
+
+  it('login posts email and password to /api/auth/login', async () => {
+    const userData = { id: '1', name: 'Test User', role: 'sales_rep' as const }
+    const mockFetch = vi.fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ success: false }), { status: 401 })
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ success: true, data: userData }), { status: 200 })
+      )
+    globalThis.fetch = mockFetch
+
+    const { result } = renderHook(() => useAuth())
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false)
+    })
+
+    await act(async () => {
+      await result.current.login('test@isuzu.co.th', 'secret123')
+    })
+
+    expect(mockFetch).toHaveBeenCalledWith('/api/auth/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'test@isuzu.co.th', password: 'secret123' }),
+    })
+    expect(result.current.user).toEqual(userData)
+  })
+
+  it('login throws error on failed login', async () => {
+    const mockFetch = vi.fn().mockImplementation(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ success: false, error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' }), { status: 401 })
+      )
+    )
+    globalThis.fetch = mockFetch
+
+    const { result } = renderHook(() => useAuth())
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false)
+    })
+
+    await expect(
+      result.current.login('test@isuzu.co.th', 'wrongpass')
+    ).rejects.toThrow('อีเมลหรือรหัสผ่านไม่ถูกต้อง')
   })
 
   it('logout calls POST /api/auth/logout and clears user', async () => {
