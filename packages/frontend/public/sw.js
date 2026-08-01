@@ -1,5 +1,5 @@
 // ISUZU Corporate CRM — Service Worker for PWA
-const CACHE_NAME = 'isuzu-crm-v2'
+const CACHE_NAME = 'isuzu-crm-v3'
 
 const PRECACHE_URLS = [
   '/',
@@ -31,7 +31,7 @@ self.addEventListener('activate', (event) => {
   )
 })
 
-// Network-first for navigation & API, cache-first for static assets
+// Network-first for all requests to guarantee fresh deployed assets
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
 
@@ -40,33 +40,17 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  // Network-first for page navigations (ensures user always gets latest HTML on deploy)
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).then((response) => {
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
         if (response && response.status === 200) {
           const responseClone = response.clone()
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone))
         }
         return response
-      }).catch(() => {
+      })
+      .catch(() => {
         return caches.match(event.request)
       })
-    )
-    return
-  }
-
-  // Cache-first for static assets, with network fallback
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached
-      return fetch(event.request).then((response) => {
-        if (response && response.status === 200) {
-          const responseClone = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone))
-        }
-        return response
-      })
-    })
   )
 })
