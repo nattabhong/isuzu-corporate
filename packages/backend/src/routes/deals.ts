@@ -30,49 +30,28 @@ dealsRoutes.get('/summary', authMiddleware, async (c) => {
   const db = resolveDb(c.env)
   const user = c.get('user')
 
-  if (user.role !== 'manager') {
-    const result = (db.all as any)(sql`
-      SELECT
-        d.stage,
-        COUNT(*) as count,
-        COALESCE(
-          SUM(CASE WHEN d.stage = 'won' THEN d.won_amount ELSE d.expected_amount END), 0
-        ) as total_value
-      FROM deals d
-      WHERE d.sales_rep_id = ${user.id}
-      GROUP BY d.stage
-      ORDER BY
-        CASE d.stage
-          WHEN 'lead' THEN 1
-          WHEN 'visit_done' THEN 2
-          WHEN 'quote_sent' THEN 3
-          WHEN 'negotiating' THEN 4
-          WHEN 'won' THEN 5
-          WHEN 'lost' THEN 6
-        END
-    `)
-    return c.json({ success: true, data: result })
-  }
+  const countExpr = sql<number>`COUNT(*)`
+  const valueExpr = sql<number>`COALESCE(SUM(CASE WHEN ${deals.stage} = 'won' THEN ${deals.wonAmount} ELSE ${deals.expectedAmount} END), 0)`
+  const orderExpr = sql`CASE ${deals.stage}
+    WHEN 'lead' THEN 1
+    WHEN 'visit_done' THEN 2
+    WHEN 'quote_sent' THEN 3
+    WHEN 'negotiating' THEN 4
+    WHEN 'won' THEN 5
+    WHEN 'lost' THEN 6
+  END`
 
-  const result = (db.all as any)(sql`
-    SELECT
-      d.stage,
-      COUNT(*) as count,
-      COALESCE(
-        SUM(CASE WHEN d.stage = 'won' THEN d.won_amount ELSE d.expected_amount END), 0
-      ) as total_value
-    FROM deals d
-    GROUP BY d.stage
-    ORDER BY
-      CASE d.stage
-        WHEN 'lead' THEN 1
-        WHEN 'visit_done' THEN 2
-        WHEN 'quote_sent' THEN 3
-        WHEN 'negotiating' THEN 4
-        WHEN 'won' THEN 5
-        WHEN 'lost' THEN 6
-      END
-  `)
+  const query = db.select({
+    stage: deals.stage,
+    count: countExpr,
+    totalValue: valueExpr,
+  }).from(deals)
+    .groupBy(deals.stage)
+    .orderBy(orderExpr)
+
+  const result = user.role === 'manager'
+    ? await query
+    : await query.where(eq(deals.salesRepId, user.id))
 
   return c.json({ success: true, data: result })
 })
@@ -82,31 +61,31 @@ dealsRoutes.get('/', authMiddleware, async (c) => {
   const db = resolveDb(c.env)
   const user = c.get('user')
 
-  if (user.role !== 'manager') {
-    const result = (db.all as any)(sql`
-      SELECT
-        d.*,
-        c.name as customer_name,
-        tm.name as sales_rep_name
-      FROM deals d
-      JOIN customers c ON c.id = d.customer_id
-      JOIN team_members tm ON tm.id = d.sales_rep_id
-      WHERE d.sales_rep_id = ${user.id}
-      ORDER BY d.created_at DESC
-    `)
-    return c.json({ success: true, data: result })
-  }
+  const query = db.select({
+    id: deals.id,
+    customerId: deals.customerId,
+    salesRepId: deals.salesRepId,
+    vehicleModel: deals.vehicleModel,
+    quantity: deals.quantity,
+    expectedAmount: deals.expectedAmount,
+    stage: deals.stage,
+    expectedCloseDate: deals.expectedCloseDate,
+    wonAmount: deals.wonAmount,
+    notes: deals.notes,
+    sourceCallLogId: deals.sourceCallLogId,
+    sourceVisitLogId: deals.sourceVisitLogId,
+    createdAt: deals.createdAt,
+    updatedAt: deals.updatedAt,
+    customerName: customers.name,
+    salesRepName: teamMembers.name,
+  }).from(deals)
+    .innerJoin(customers, eq(deals.customerId, customers.id))
+    .innerJoin(teamMembers, eq(deals.salesRepId, teamMembers.id))
+    .orderBy(sql`${deals.createdAt} DESC`)
 
-  const result = (db.all as any)(sql`
-    SELECT
-      d.*,
-      c.name as customer_name,
-      tm.name as sales_rep_name
-    FROM deals d
-    JOIN customers c ON c.id = d.customer_id
-    JOIN team_members tm ON tm.id = d.sales_rep_id
-    ORDER BY d.created_at DESC
-  `)
+  const result = user.role === 'manager'
+    ? await query
+    : await query.where(eq(deals.salesRepId, user.id))
 
   return c.json({ success: true, data: result })
 })
