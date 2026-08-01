@@ -2393,12 +2393,12 @@ body {
 .topbar-user {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .user-avatar-badge {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
   color: #FFFFFF;
@@ -2406,6 +2406,7 @@ body {
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+  flex-shrink: 0;
 }
 
 .user-info {
@@ -2414,67 +2415,70 @@ body {
   gap: 2px;
 }
 
-.user-name {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--fg);
-}
-
-.user-meta {
+.user-name-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+.user-name {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--fg);
+  line-height: 1.2;
+}
+
 .user-email {
   font-size: 0.75rem;
-  color: var(--fg-3);
+  color: #6B7280;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
 .user-role-tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.725rem;
+  font-size: 0.7rem;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 12px;
-  background: rgba(254, 226, 226, 0.8);
+  line-height: 1;
+}
+
+.user-role-tag.manager {
+  background: rgba(254, 226, 226, 0.9);
   color: #DC2626;
   border: 1px solid rgba(252, 165, 165, 0.6);
 }
 
-.user-role-tag.manager {
-  background: rgba(254, 226, 226, 0.8);
-  color: #DC2626;
-}
-
 .user-role-tag.sales_rep {
-  background: rgba(243, 244, 246, 0.8);
-  color: var(--fg-2);
-  border-color: rgba(229, 231, 235, 0.8);
+  background: rgba(243, 244, 246, 0.9);
+  color: #4B5563;
+  border: 1px solid rgba(229, 231, 235, 0.9);
 }
 
 .btn-logout {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 13px;
+  padding: 7px 14px;
   font-size: 0.8125rem;
   font-weight: 500;
   color: #DC2626;
-  background: rgba(254, 242, 242, 0.8);
-  border: 1px solid rgba(252, 165, 165, 0.5);
-  border-radius: 10px;
+  background: rgba(254, 242, 242, 0.85);
+  border: 1px solid rgba(252, 165, 165, 0.6);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
 }
 
 .btn-logout:hover {
   background: #DC2626;
   color: #FFFFFF;
   border-color: #DC2626;
-  box-shadow: 0 3px 10px rgba(220, 38, 38, 0.25);
+  box-shadow: 0 3px 12px rgba(220, 38, 38, 0.25);
 }
 
 /* ===== Settings Page ===== */

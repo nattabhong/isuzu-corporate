@@ -7,7 +7,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ user, onLogout }: TopBarProps) {
-  const roleLabel = user.role === 'manager' ? 'ผู้จัดการ (Manager)' : 'พนักงานขาย (Sales Rep)'
+  const roleLabelShort = user.role === 'manager' ? 'ผู้จัดการ' : 'พนักงานขาย'
 
   return (
     <header className="topbar">
@@ -19,17 +19,17 @@ export function TopBar({ user, onLogout }: TopBarProps) {
           <User size={16} />
         </div>
         <div className="user-info">
-          <div className="user-name">{user.name}</div>
-          <div className="user-meta">
-            {user.email && <span className="user-email">{user.email}</span>}
+          <div className="user-name-row">
+            <span className="user-name">{user.name}</span>
             <span className={`user-role-tag ${user.role}`}>
-              {user.role === 'manager' ? <ShieldCheck size={12} /> : <UserCheck size={12} />}
-              <span>{roleLabel}</span>
+              {user.role === 'manager' ? <ShieldCheck size={11} /> : <UserCheck size={11} />}
+              <span>{roleLabelShort}</span>
             </span>
           </div>
+          {user.email && <div className="user-email">{user.email}</div>}
         </div>
         <button type="button" className="btn-logout" onClick={onLogout} title="ออกจากระบบ">
-          <LogOut size={16} />
+          <LogOut size={15} />
           <span className="logout-text">ออกจากระบบ</span>
         </button>
       </div>
