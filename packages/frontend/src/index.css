@@ -3143,3 +3143,105 @@ body {
   color: #B91C1C;
   border: 1px solid rgba(252, 165, 165, 0.8);
 }
+
+/* Modal Actions & Page Actions Overlap Fix */
+.modal-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid #F3F4F6 !important;
+  width: 100% !important;
+  position: static !important;
+  float: none !important;
+}
+
+.modal-actions.full-width {
+  grid-column: 1 / -1 !important;
+}
+
+.modal-actions button,
+.modal-actions .btn-primary,
+.modal-actions .btn-secondary {
+  position: static !important;
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 42px !important;
+  padding: 0 20px !important;
+  border-radius: 12px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.modal-actions .btn-secondary {
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+.modal-actions .btn-secondary:hover {
+  background: #E5E7EB !important;
+  color: #111827 !important;
+}
+
+.modal-actions .btn-primary {
+  background: #DC2626 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #DC2626 !important;
+  box-shadow: 0 3px 12px rgba(220, 38, 38, 0.25) !important;
+}
+
+.modal-actions .btn-primary:hover {
+  background: #B91C1C !important;
+  border-color: #B91C1C !important;
+}
+
+.page-header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin-bottom: 24px !important;
+  width: 100% !important;
+}
+
+.page-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+  position: static !important;
+  float: none !important;
+}
+
+.page-actions button,
+.page-actions .btn-primary,
+.page-actions .btn-secondary {
+  position: static !important;
+  float: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  height: 42px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
