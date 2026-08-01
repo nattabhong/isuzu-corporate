@@ -44,7 +44,7 @@ dealsRoutes.get('/summary', authMiddleware, async (c) => {
   const query = db.select({
     stage: deals.stage,
     count: countExpr,
-    totalValue: valueExpr,
+    total_value: valueExpr,
   }).from(deals)
     .groupBy(deals.stage)
     .orderBy(orderExpr)
@@ -63,21 +63,21 @@ dealsRoutes.get('/', authMiddleware, async (c) => {
 
   const query = db.select({
     id: deals.id,
-    customerId: deals.customerId,
-    salesRepId: deals.salesRepId,
-    vehicleModel: deals.vehicleModel,
+    customer_id: deals.customerId,
+    sales_rep_id: deals.salesRepId,
+    vehicle_model: deals.vehicleModel,
     quantity: deals.quantity,
-    expectedAmount: deals.expectedAmount,
+    expected_amount: deals.expectedAmount,
     stage: deals.stage,
-    expectedCloseDate: deals.expectedCloseDate,
-    wonAmount: deals.wonAmount,
+    expected_close_date: deals.expectedCloseDate,
+    won_amount: deals.wonAmount,
     notes: deals.notes,
-    sourceCallLogId: deals.sourceCallLogId,
-    sourceVisitLogId: deals.sourceVisitLogId,
-    createdAt: deals.createdAt,
-    updatedAt: deals.updatedAt,
-    customerName: customers.name,
-    salesRepName: teamMembers.name,
+    source_call_log_id: deals.sourceCallLogId,
+    source_visit_log_id: deals.sourceVisitLogId,
+    created_at: deals.createdAt,
+    updated_at: deals.updatedAt,
+    customer_name: customers.name,
+    sales_rep_name: teamMembers.name,
   }).from(deals)
     .innerJoin(customers, eq(deals.customerId, customers.id))
     .innerJoin(teamMembers, eq(deals.salesRepId, teamMembers.id))
