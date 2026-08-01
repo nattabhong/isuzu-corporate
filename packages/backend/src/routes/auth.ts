@@ -304,14 +304,59 @@ authRoutes.get('/line/callback', async (c) => {
   return c.redirect('/')
 })
 
-// GET /api/auth/me — return current user
-const meApp = new Hono<{ Bindings: { JWT_SECRET: string }; Variables: { user: { id: string; role: string; name: string } } }>()
-meApp.use('*', authMiddleware)
-meApp.get('/', (c) => {
+// GET /api/auth/me — return current user profile
+authRoutes.get('/me', authMiddleware, async (c) => {
   const user = c.get('user')
+  try {
+    const db = resolveDb(c.env)
+    const rows = await db.select().from(teamMembers).where(eq(teamMembers.id, user.id)).limit(1).all()
+    const member = rows[0]
+    if (member) {
+      const { passwordHash, ...safeMember } = member
+      return c.json({ success: true, data: safeMember })
+    }
+  } catch {
+    // Fall back to JWT user payload if DB lookup is unavailable or in test mocks
+  }
   return c.json({ success: true, data: user })
 })
-authRoutes.route('/me', meApp)
+
+// POST /api/auth/change-password — update password
+authRoutes.post('/change-password', authMiddleware, async (c) => {
+  const user = c.get('user')
+  let body: { currentPassword?: string; newPassword?: string }
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ success: false, error: 'ข้อมูลไม่ถูกต้อง' }, 400)
+  }
+
+  const { currentPassword, newPassword } = body
+  if (!currentPassword || !newPassword || newPassword.length < 6) {
+    return c.json({ success: false, error: 'รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 6 ตัวอักษร' }, 400)
+  }
+
+  const db = resolveDb(c.env)
+  const rows = await db.select().from(teamMembers).where(eq(teamMembers.id, user.id)).limit(1).all()
+  const member = rows[0]
+
+  if (!member || !member.passwordHash) {
+    return c.json({ success: false, error: 'ไม่พบบัญชีผู้ใช้' }, 404)
+  }
+
+  const valid = await verifyPassword(currentPassword, member.passwordHash)
+  if (!valid) {
+    return c.json({ success: false, error: 'รหัสผ่านปัจจุบันไม่ถูกต้อง' }, 400)
+  }
+
+  const newHash = await hashPassword(newPassword)
+  await db.update(teamMembers)
+    .set({ passwordHash: newHash, updatedAt: new Date().toISOString() })
+    .where(eq(teamMembers.id, user.id))
+    .run()
+
+  return c.json({ success: true, message: 'เปลี่ยนรหัสผ่านสำเร็จ' })
+})
 
 // POST /api/auth/logout — clear session
 authRoutes.post('/logout', (c) => {

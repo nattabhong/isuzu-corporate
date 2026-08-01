@@ -4,6 +4,9 @@ export interface AuthUser {
   id: string
   name: string
   role: 'manager' | 'sales_rep'
+  email?: string
+  phone?: string
+  territory?: string
 }
 
 export function useAuth() {

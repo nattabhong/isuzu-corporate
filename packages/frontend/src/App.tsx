@@ -21,7 +21,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/*" element={<Dashboard user={user} />} />
+        <Route path="/*" element={<Dashboard user={user} onLogout={logout} />} />
       </Routes>
     </BrowserRouter>
   )

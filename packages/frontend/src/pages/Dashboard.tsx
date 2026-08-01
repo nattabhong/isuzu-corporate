@@ -12,11 +12,12 @@ import type { AuthUser } from '../hooks/useAuth'
 
 interface DashboardProps {
   user: AuthUser
+  onLogout: () => void
 }
 
-export function Dashboard({ user }: DashboardProps) {
+export function Dashboard({ user, onLogout }: DashboardProps) {
   return (
-    <Layout role={user.role}>
+    <Layout user={user} onLogout={onLogout}>
       <Routes>
         <Route path="/" element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<Overview user={user} />} />
@@ -28,7 +29,7 @@ export function Dashboard({ user }: DashboardProps) {
         {user.role === 'manager' && (
           <>
             <Route path="/reports" element={<Reports />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<Settings user={user} />} />
           </>
         )}
       </Routes>
