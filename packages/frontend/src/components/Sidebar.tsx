@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Settings, Truck } from 'lucide-react'
+import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Users, Settings, Truck } from 'lucide-react'
 
 interface SidebarProps {
   role: 'manager' | 'sales_rep'
@@ -14,6 +14,7 @@ const commonItems = [
 ]
 
 const managerItems = [
+  { to: '/team', label: 'ทีมงาน', icon: Users },
   { to: '/reports', label: 'รายงาน', icon: BarChart3 },
   { to: '/settings', label: 'ตั้งค่า', icon: Settings },
 ]

@@ -89,6 +89,49 @@ teamRoutes.patch('/:id', authMiddleware, requireManager, async (c) => {
   return c.json({ success: true, data: member ?? null })
 })
 
+// POST /:id/reset-password — manager reset staff password
+teamRoutes.post('/:id/reset-password', authMiddleware, requireManager, async (c) => {
+  const db = resolveDb(c.env)
+  const body = await c.req.json() as { newPassword?: string }
+  const { newPassword } = body
+
+  if (!newPassword || newPassword.length < 6) {
+    return c.json({ success: false, error: 'รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 6 ตัวอักษร' }, 400)
+  }
+
+  const { hashPassword } = await import('../services/password')
+  const passwordHash = await hashPassword(newPassword)
+
+  await db.update(teamMembers)
+    .set({ passwordHash, updatedAt: new Date().toISOString() })
+    .where(eq(teamMembers.id, c.req.param('id')))
+
+  return c.json({ success: true, message: 'รีเซ็ตรหัสผ่านสำเร็จ' })
+})
+
+// POST /reassign — manager reassign customers and deals from oldRep to newRep
+teamRoutes.post('/reassign', authMiddleware, requireManager, async (c) => {
+  const db = resolveDb(c.env)
+  const body = await c.req.json() as { fromSalesRepId?: string; toSalesRepId?: string }
+  const { fromSalesRepId, toSalesRepId } = body
+
+  if (!fromSalesRepId || !toSalesRepId) {
+    return c.json({ success: false, error: 'กรุณาระบุพนักงานต้นทางและปลายทาง' }, 400)
+  }
+
+  const { customers, deals } = await import('../db/schema')
+
+  await db.update(customers)
+    .set({ assignedTo: toSalesRepId, updatedAt: new Date().toISOString() })
+    .where(eq(customers.assignedTo, fromSalesRepId))
+
+  await db.update(deals)
+    .set({ salesRepId: toSalesRepId, updatedAt: new Date().toISOString() })
+    .where(eq(deals.salesRepId, fromSalesRepId))
+
+  return c.json({ success: true, message: 'โอนย้ายพอร์ตลูกค้าและดีลสำเร็จ' })
+})
+
 // DELETE /:id — deactivate member (manager only, soft delete)
 teamRoutes.delete('/:id', authMiddleware, requireManager, async (c) => {
   const db = resolveDb(c.env)

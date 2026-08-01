@@ -239,6 +239,42 @@ export function Settings({ user }: SettingsProps) {
             </div>
           </div>
         </div>
+
+        {/* Enterprise Integration Gateway Card */}
+        <div className="glass-panel settings-card full-width">
+          <div className="card-header-with-icon">
+            <Building2 className="card-icon" size={22} />
+            <h2>การเชื่อมต่อระบบภายในองค์กร (Internal Enterprise Integration)</h2>
+          </div>
+
+          <div className="integration-banner">
+            <div className="integration-status-header">
+              <span className="status-pill active">พร้อมเชื่อมต่อ (Gateway Active)</span>
+              <span className="integration-subtitle">รองรับการเชื่อมต่อกับระบบ ERP / Dealer Management System (DMS) ภายในองค์กร</span>
+            </div>
+
+            <div className="integration-grid">
+              <div className="info-item">
+                <div>
+                  <span className="info-label">API Key สำหรับระบบภายใน (Internal System API Key)</span>
+                  <span className="info-value code-font">isz_live_99f8a42b101c4e97a89f2a01</span>
+                </div>
+              </div>
+              <div className="info-item">
+                <div>
+                  <span className="info-label">Webhook URL สรุปดีล/ลูกค้า</span>
+                  <span className="info-value code-font">https://isuzu-corporate.pages.dev/api/integration/webhook</span>
+                </div>
+              </div>
+              <div className="info-item">
+                <div>
+                  <span className="info-label">รหัสอ้างอิงลูกค้าระบบภายใน (External Customer Ref ID)</span>
+                  <span className="info-value">รองรับฟิลด์ External ID (ERP-Ref) แยกตามรายบริษัทลูกค้า</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

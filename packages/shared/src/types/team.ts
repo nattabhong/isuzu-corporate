@@ -7,6 +7,7 @@ export interface TeamMember {
   role: 'manager' | 'sales_rep'
   territory: string | null
   avatarUrl: string | null
+  salesTarget?: number | null
   isActive: boolean
   createdAt: string
   updatedAt: string

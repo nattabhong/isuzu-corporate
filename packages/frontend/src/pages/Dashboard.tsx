@@ -8,6 +8,7 @@ import { CallPlanner } from './CallPlanner'
 import { Deals } from './Deals'
 import { Reports } from './Reports'
 import { Settings } from './Settings'
+import { Team } from './Team'
 import type { AuthUser } from '../hooks/useAuth'
 
 interface DashboardProps {
@@ -28,6 +29,7 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
         <Route path="/deals" element={<Deals userRole={user.role} />} />
         {user.role === 'manager' && (
           <>
+            <Route path="/team" element={<Team />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings user={user} />} />
           </>

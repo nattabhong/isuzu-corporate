@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   Trophy,
   Flame,
+  Download,
 } from 'lucide-react'
 import {
   fetchVisitCompletion,
@@ -161,20 +162,62 @@ export function Reports() {
     load()
   }, [selectedMonth])
 
+  const handleExportCSV = () => {
+    let csvContent = '\uFEFF'
+    if (activeTab === 'visit') {
+      csvContent += 'พนักงานขาย,เป้าหมาย Visit,Visit สำเร็จ,ร้อยละสำเร็จ\n'
+      visitData.forEach((v) => {
+        const rate = v.planned > 0 ? Math.round((v.completed / v.planned) * 100) : 0
+        csvContent += `"${v.salesRepName}",${v.planned},${v.completed},${rate}%\n`
+      })
+    } else if (activeTab === 'call') {
+      csvContent += 'พนักงานขาย,เป้าหมาย Call,Call สำเร็จ,ร้อยละสำเร็จ\n'
+      callData.forEach((c) => {
+        const rate = c.planned > 0 ? Math.round((c.completed / c.planned) * 100) : 0
+        csvContent += `"${c.salesRepName}",${c.planned},${c.completed},${rate}%\n`
+      })
+    } else if (activeTab === 'sales') {
+      csvContent += 'พนักงานขาย,จำนวนดีลที่ปิดได้,มูลค่ายอดขายรวม (บาท)\n'
+      salesData.forEach((s) => {
+        csvContent += `"${s.salesRepName}",${s.dealsWon},${s.totalValue}\n`
+      })
+    } else if (activeTab === 'leaderboard') {
+      csvContent += 'อันดับ,พนักงานขาย,คะแนนรวม,Visit,Call,ดีลที่ปิดได้\n'
+      leaderboard.forEach((l, idx) => {
+        csvContent += `${idx + 1},"${l.salesRepName}",${l.score},${l.visitCompleted},${l.callCompleted},${l.dealsWon}\n`
+      })
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `report-${activeTab}-${selectedMonth}.csv`
+    a.click()
+  }
+
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div className="page reports-page">
       <div className="page-header">
-        <h1>รายงาน</h1>
-        <div className="month-selector">
-          <label htmlFor="report-month">เดือน</label>
-          <input
-            id="report-month"
-            type="month"
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-          />
+        <div>
+          <h1>รายงาน</h1>
+        </div>
+        <div className="page-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div className="month-selector">
+            <label htmlFor="report-month">เดือน</label>
+            <input
+              id="report-month"
+              type="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            />
+          </div>
+          <button type="button" className="btn-secondary" onClick={handleExportCSV}>
+            <Download size={16} />
+            <span>ส่งออก CSV</span>
+          </button>
         </div>
       </div>
 
