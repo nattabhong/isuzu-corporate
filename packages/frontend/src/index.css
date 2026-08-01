@@ -126,14 +126,18 @@ button,
 }
 
 /* Secondary Light Gray Button */
-.btn-secondary {
+.btn-secondary,
+.btn-cancel,
+.btn-outline {
   background: #F3F4F6 !important;
   color: #374151 !important;
   border: 1px solid #E5E7EB !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
-.btn-secondary:hover {
+.btn-secondary:hover,
+.btn-cancel:hover,
+.btn-outline:hover {
   background: #E5E7EB !important;
   color: #111827 !important;
   border-color: #D1D5DB !important;

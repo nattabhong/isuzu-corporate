@@ -942,7 +942,7 @@ export function CallForm({
               )}
             </div>
             <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-              <button type="button" className="btn-cancel" onClick={onClose}>
+              <button type="button" className="btn-secondary" onClick={onClose}>
                 ยกเลิก
               </button>
               <button type="submit" className="btn-primary" disabled={saving}>

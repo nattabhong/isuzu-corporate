@@ -379,12 +379,12 @@ export function Deals({ userRole }: DealsProps = {}) {
                   />
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '16px' }}>
-                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
+              <div className="modal-actions full-width">
+                <button type="button" className="btn-secondary" onClick={() => setShowModal(false)}>
                   ยกเลิก
                 </button>
                 <button type="submit" className="btn-primary" disabled={formSubmitting}>
-                  {formSubmitting ? 'กำลังบันทึก...' : 'บันทึก'}
+                  {formSubmitting ? 'กำลังบันทึก...' : 'บันทึกดีล'}
                 </button>
               </div>
             </form>

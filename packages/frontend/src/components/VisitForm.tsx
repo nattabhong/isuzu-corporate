@@ -249,8 +249,8 @@ export function VisitForm({ customers, initialData, onSave, onClose }: VisitForm
             </div>
           </div>
 
-          <div className="form-actions">
-            <button type="button" className="btn-cancel" onClick={onClose}>
+          <div className="modal-actions full-width">
+            <button type="button" className="btn-secondary" onClick={onClose}>
               ยกเลิก
             </button>
             <button type="submit" className="btn-primary">

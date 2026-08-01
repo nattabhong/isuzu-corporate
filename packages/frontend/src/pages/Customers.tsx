@@ -187,7 +187,7 @@ export function Customers() {
                     <SegmentBadge segment={c.segment} />
                   </td>
                   <td className="td-muted">{c.province || '-'}</td>
-                  <td className="td-muted">{c.province || '-'}</td>
+                  <td className="td-muted">{c.district || '-'}</td>
                   <td>
                     <StatusBadge status={c.status} />
                   </td>
