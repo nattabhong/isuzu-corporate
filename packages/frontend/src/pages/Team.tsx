@@ -380,27 +380,30 @@ export function Team() {
                         <div className="action-buttons-group">
                           <button
                             type="button"
-                            className="btn-icon"
-                            title="แก้ไขข้อมูล"
+                            className="btn-action btn-action-edit"
+                            title="แก้ไขข้อมูลพนักงาน"
                             onClick={() => openEditModal(member)}
                           >
-                            <Edit3 size={15} />
+                            <Edit3 size={14} />
+                            <span>แก้ไข</span>
                           </button>
                           <button
                             type="button"
-                            className="btn-icon"
+                            className="btn-action btn-action-key"
                             title="รีเซ็ตรหัสผ่าน"
                             onClick={() => setResetPasswordMember(member)}
                           >
-                            <Lock size={15} />
+                            <Lock size={14} />
+                            <span>รหัสผ่าน</span>
                           </button>
                           <button
                             type="button"
-                            className={`btn-icon ${member.isActive ? 'btn-danger' : 'btn-success'}`}
+                            className={`btn-action ${member.isActive ? 'btn-action-danger' : 'btn-action-success'}`}
                             title={member.isActive ? 'ระงับบัญชี' : 'เปิดใช้งาน'}
                             onClick={() => handleToggleActive(member)}
                           >
-                            {member.isActive ? <UserX size={15} /> : <UserCheck2 size={15} />}
+                            {member.isActive ? <UserX size={14} /> : <UserCheck2 size={14} />}
+                            <span>{member.isActive ? 'ระงับ' : 'เปิดใช้งาน'}</span>
                           </button>
                         </div>
                       </td>
