@@ -46,7 +46,7 @@ async function issueSession(
     .sign(encoder.encode(jwtSecret))
 
   const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString()
-  db.insert(sessions).values({
+  await db.insert(sessions).values({
     id: crypto.randomUUID(),
     teamMemberId: memberId,
     token,
@@ -93,7 +93,7 @@ authRoutes.post('/register', async (c) => {
   const passwordHash = await hashPassword(password)
   const memberId = crypto.randomUUID()
 
-  db.insert(teamMembers).values({
+  await db.insert(teamMembers).values({
     id: memberId,
     lineUserId: `email_${memberId}`,
     name,
@@ -261,7 +261,7 @@ authRoutes.get('/line/callback', async (c) => {
     memberRole = 'sales_rep'
     memberName = profile.displayName
 
-    db.insert(teamMembers).values({
+    await db.insert(teamMembers).values({
       id: memberId,
       lineUserId: profile.userId,
       name: profile.displayName,
@@ -285,7 +285,7 @@ authRoutes.get('/line/callback', async (c) => {
 
   // Store session
   const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString()
-  db.insert(sessions).values({
+  await db.insert(sessions).values({
     id: crypto.randomUUID(),
     teamMemberId: memberId,
     token,

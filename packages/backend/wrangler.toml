@@ -12,14 +12,9 @@ database_id = "c923da29-735b-4c6b-8379-74bf2fe3f206"
 # binding = "STORAGE"
 # bucket_name = "isuzu-corporate-files"
 
-[vars]
-LINE_CHANNEL_ID = ""
-LINE_CHANNEL_SECRET = ""
-LINE_CHANNEL_ACCESS_TOKEN = ""
-JWT_SECRET = ""
-GOOGLE_MAPS_API_KEY = ""
-MCP_API_KEY = ""
-INVITE_CODE = ""
+# All secrets are set via `wrangler secret put`:
+#   JWT_SECRET, LINE_CHANNEL_ID, LINE_CHANNEL_SECRET,
+#   LINE_CHANNEL_ACCESS_TOKEN, GOOGLE_MAPS_API_KEY, MCP_API_KEY, INVITE_CODE
 
 [env.production]
 # Override for production
