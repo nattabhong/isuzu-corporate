@@ -231,22 +231,7 @@ body {
   border-color: #DC2626 !important;
 }
 
-.btn-cancel {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 16px;
-  background: var(--bg-2);
-  color: var(--fg-2);
-  border: 1px solid var(--border);
-  font-family: var(--font);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.btn-cancel:hover {
-  background: var(--border);
-}
+/* btn-cancel handled by .btn-secondary above */
 
 /* ===== Filters Bar ===== */
 .filters-bar {
@@ -276,13 +261,22 @@ body {
 
 .filter-group input[type="month"],
 .filter-group select {
-  padding: 6px 10px;
+  padding: 6px 12px;
   border: 1px solid var(--border);
+  border-radius: 10px;
   background: var(--surface);
   font-family: var(--font);
   font-size: 0.875rem;
   color: var(--fg);
   min-width: 160px;
+  height: 38px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.filter-group input[type="month"]:focus,
+.filter-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
 }
 
 /* ===== Data Table ===== */
@@ -558,8 +552,16 @@ body {
 }
 
 .form-group input[type="file"] {
+  height: auto;
+  line-height: normal;
+  padding: 10px 14px;
   font-family: var(--font);
   font-size: 0.8125rem;
+  cursor: pointer;
+  border-radius: 12px;
+  border: 1.5px dashed rgba(209, 213, 219, 0.9);
+  background: #F9FAFB;
+  color: var(--muted);
 }
 
 /* ===== GPS Check-in ===== */
@@ -572,21 +574,25 @@ body {
 .checkin-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 5px 12px;
+  height: 30px;
   background: var(--accent-soft);
   color: var(--accent-2);
-  border: 1px solid var(--accent);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
   font-family: var(--font);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .checkin-btn:hover {
   background: var(--accent);
   color: var(--accent-text);
+  border-color: var(--accent);
 }
 
 .gps-fields {
@@ -611,11 +617,20 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 10px var(--space-lg);
-  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 72px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.mood-option:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
 }
 
 .mood-option input[type="radio"] {
@@ -626,19 +641,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   color: var(--muted);
 }
 
 .mood-label {
   font-size: 0.75rem;
+  font-weight: 500;
   color: var(--muted);
 }
 
 .mood-selected {
   border-color: var(--accent);
   background: var(--accent-soft);
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
 }
 
 .mood-selected .mood-icon {
@@ -647,7 +664,7 @@ body {
 
 .mood-selected .mood-label {
   color: var(--accent-2);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ===== Login Page (Modern Glassmorphism) ===== */
@@ -965,16 +982,20 @@ body {
 
 .filter-input {
   flex: 1;
-  padding: 8px 12px;
+  padding: 8px 14px;
   border: 1px solid var(--border);
+  border-radius: 10px;
   background: var(--surface);
   font-family: var(--font);
   font-size: 0.875rem;
   color: var(--fg);
+  height: 38px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 .filter-input:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
 }
 .filter-input::placeholder {
   color: var(--muted);
@@ -982,31 +1003,36 @@ body {
 
 .filter-tabs {
   display: flex;
-  gap: 0;
+  gap: 4px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
 }
 
 .tab {
-  padding: 6px 16px;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  padding: 5px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
   font-family: var(--font);
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--fg-2);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  margin-left: -1px;
-}
-.tab:first-child {
-  margin-left: 0;
+  transition: all 0.15s ease;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
 }
 .tab:hover {
-  background: var(--bg-2);
+  background: rgba(0,0,0,0.05);
+  color: var(--fg);
 }
 .tab-active {
   background: var(--accent);
   color: var(--accent-text);
-  border-color: var(--accent);
+  box-shadow: 0 1px 4px rgba(220,38,38,0.25);
 }
 .tab-active:hover {
   background: var(--accent-2);
@@ -1015,10 +1041,19 @@ body {
 .filter-select {
   padding: 6px 12px;
   border: 1px solid var(--border);
+  border-radius: 10px;
   background: var(--surface);
   font-family: var(--font);
   font-size: 0.8125rem;
   color: var(--fg);
+  height: 38px;
+  outline: none;
+  transition: border-color 0.15s;
+  cursor: pointer;
+}
+.filter-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
 }
 
 /* ===== Customers Table ===== */
