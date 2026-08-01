@@ -158,6 +158,11 @@ body {
 /* ===== Data Table ===== */
 .table-container {
   overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(229, 231, 235, 0.85);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .data-table {
@@ -318,8 +323,8 @@ body {
   border: none;
   color: var(--muted);
   cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.15s;
+  border-radius: 50%;
+  transition: all 0.18s ease;
 }
 
 .modal-close:hover {
@@ -1370,10 +1375,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
-  border-radius: 4px;
+  border-radius: 12px;
 }
 
 .summary-body {
@@ -1936,21 +1941,26 @@ body {
 }
 
 .kanban-column {
-  flex: 0 0 280px;
+  flex: 0 0 285px;
   display: flex;
   flex-direction: column;
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
 }
 
 .kanban-column-header {
-  padding: var(--space-md) var(--space-lg);
-  border-bottom: 1px solid var(--border);
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.7);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.9);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
 }
 
 .kanban-column-header h3 {
@@ -1981,17 +1991,19 @@ body {
 
 /* Kanban card */
 .kanban-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  margin-bottom: var(--space-sm);
+  background: #FFFFFF;
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  margin-bottom: 12px;
   cursor: grab;
-  transition: box-shadow 0.15s;
-  border-radius: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .kanban-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .kanban-card.dragging {
