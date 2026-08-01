@@ -359,10 +359,16 @@ export function Team() {
                         </span>
                       </td>
                       <td>
-                        <div className="target-cell">
-                          <Target size={14} className="target-icon" />
-                          <span>{(member.salesTarget || 5).toLocaleString()} คัน/เดือน</span>
-                        </div>
+                        {member.role === 'manager' ? (
+                          <span className="text-muted" style={{ fontSize: '0.8125rem', color: '#9CA3AF' }}>
+                            — (ไม่มีเป้าหมายขาย)
+                          </span>
+                        ) : (
+                          <div className="target-cell">
+                            <Target size={14} className="target-icon" />
+                            <span>{(member.salesTarget || 5).toLocaleString()} คัน/เดือน</span>
+                          </div>
+                        )}
                       </td>
                       <td>
                         <span className={`status-badge ${member.isActive ? 'active' : 'inactive'}`}>
@@ -466,16 +472,18 @@ export function Team() {
                   <option value="manager">ผู้จัดการ (Manager)</option>
                 </select>
               </div>
-              <div className="form-group full-width">
-                <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
-                <input
-                  type="number"
-                  min={1}
-                  step={1}
-                  value={formSalesTarget}
-                  onChange={(e) => setFormSalesTarget(Number(e.target.value))}
-                />
-              </div>
+              {formRole === 'sales_rep' && (
+                <div className="form-group full-width">
+                  <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
+                  <input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={formSalesTarget}
+                    onChange={(e) => setFormSalesTarget(Number(e.target.value))}
+                  />
+                </div>
+              )}
               <div className="modal-actions full-width">
                 <button type="button" className="btn-secondary" onClick={() => setIsAddModalOpen(false)}>
                   ยกเลิก
@@ -524,16 +532,18 @@ export function Team() {
                   <option value="manager">ผู้จัดการ (Manager)</option>
                 </select>
               </div>
-              <div className="form-group full-width">
-                <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
-                <input
-                  type="number"
-                  min={1}
-                  step={1}
-                  value={formSalesTarget}
-                  onChange={(e) => setFormSalesTarget(Number(e.target.value))}
-                />
-              </div>
+              {formRole === 'sales_rep' && (
+                <div className="form-group full-width">
+                  <label>เป้าหมายขายรถยนต์รายเดือน (Target Quota - คัน)</label>
+                  <input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={formSalesTarget}
+                    onChange={(e) => setFormSalesTarget(Number(e.target.value))}
+                  />
+                </div>
+              )}
               <div className="modal-actions full-width">
                 <button type="button" className="btn-secondary" onClick={() => setEditingMember(null)}>
                   ยกเลิก
