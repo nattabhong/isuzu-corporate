@@ -2,8 +2,9 @@ import { useState, useEffect, useMemo, type FormEvent } from 'react'
 import {
   X, Plus, Trash2, Phone, Building2, User, Calendar, Clock,
   Truck, Wrench, ShoppingCart, Users, Briefcase, FileText,
-  ChevronRight, AlertCircle
+  ChevronRight, AlertCircle, Sparkles
 } from 'lucide-react'
+import { AISummarizeButton } from './AISummarizeButton'
 import type { Customer } from '@sala-corporate/shared'
 import {
   USAGE_TYPES, MAIN_PROBLEMS, KEY_FACTORS, INTERESTED_SERVICES,
@@ -779,13 +780,26 @@ export function CallForm({
               </div>
 
               <div className="form-group full-width">
-                <label htmlFor="customerNeeds">ความต้องการของลูกค้า</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label htmlFor="customerNeeds" style={{ margin: 0 }}>ความต้องการของลูกค้า</label>
+                  <AISummarizeButton
+                    rawText={form.customerNeeds || form.problemsFound || form.usageStatusNotes}
+                    onSummarized={(data) => {
+                      setForm((prev) => ({
+                        ...prev,
+                        customerNeeds: data.customerNeeds,
+                        leadLevel: data.leadLevel || prev.leadLevel,
+                        nextActionDetails: data.nextAction || prev.nextActionDetails,
+                      }))
+                    }}
+                  />
+                </div>
                 <textarea
                   id="customerNeeds"
                   rows={3}
                   value={form.customerNeeds}
                   onChange={str('customerNeeds')}
-                  placeholder="สรุปความต้องการหลักของลูกค้า..."
+                  placeholder="สรุปความต้องการหลักของลูกค้า หรือวางโน้ตการคุยแล้วกดให้ AI สรุป..."
                 />
               </div>
 

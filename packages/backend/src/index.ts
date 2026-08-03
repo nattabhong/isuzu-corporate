@@ -9,6 +9,7 @@ import { targetsRoutes } from './routes/targets'
 import { dealsRoutes } from './routes/deals'
 import { mcpRoutes } from './routes/mcp'
 import { notificationsRoutes } from './routes/notifications'
+import { aiRoutes } from './routes/ai'
 
 type Env = {
   DB: D1Database
@@ -65,5 +66,8 @@ app.route('/api', mcpRoutes)
 
 // Notifications
 app.route('/api/notifications', notificationsRoutes)
+
+// AI Co-Pilot routes
+app.route('/api/ai', aiRoutes)
 
 export default app

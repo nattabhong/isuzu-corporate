@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, X, FileText } from 'lucide-react'
+import { Plus, X, FileText, Sparkles } from 'lucide-react'
 import { api } from '../lib/api'
 import { ISUZU_OFFICIAL_LINEUP } from '@sala-corporate/shared'
 import { QuotationModal } from '../components/QuotationModal'
 import { LostDealModal } from '../components/LostDealModal'
+import { AIBattlecardModal } from '../components/AIBattlecardModal'
 
 interface Deal {
   id: string
@@ -72,6 +73,7 @@ export function Deals({ userRole }: DealsProps = {}) {
   // Feature Modal state
   const [quoteDeal, setQuoteDeal] = useState<Deal | null>(null)
   const [pendingLostDealId, setPendingLostDealId] = useState<string | null>(null)
+  const [battlecardBrand, setBattlecardBrand] = useState<string | null>(null)
 
   // Form state
   const [formCustomerId, setFormCustomerId] = useState('')
@@ -337,18 +339,40 @@ export function Deals({ userRole }: DealsProps = {}) {
                           {formatCurrency(deal.expected_amount)}
                         </div>
                         <div className="kanban-card-rep">{deal.sales_rep_name}</div>
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-secondary"
-                          style={{ marginTop: '8px', padding: '3px 8px', fontSize: '0.75rem', width: '100%', justifyContent: 'center' }}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setQuoteDeal(deal)
-                          }}
-                        >
-                          <FileText size={12} />
-                          <span>ใบเสนอราคา</span>
-                        </button>
+                        <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-secondary"
+                            style={{ flex: 1, padding: '3px 6px', fontSize: '0.75rem', justifyContent: 'center' }}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setQuoteDeal(deal)
+                            }}
+                          >
+                            <FileText size={12} />
+                            <span>ใบเสนอราคา</span>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-secondary"
+                            style={{
+                              background: '#FEF2F2',
+                              color: '#CC0000',
+                              borderColor: '#FCA5A5',
+                              padding: '3px 6px',
+                              fontSize: '0.75rem',
+                              justifyContent: 'center',
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setBattlecardBrand('Toyota')
+                            }}
+                            title="AI คำแนะนำปิดการขายแข่งขัน"
+                          >
+                            <Sparkles size={12} />
+                            <span>AI Battlecard</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -470,6 +494,14 @@ export function Deals({ userRole }: DealsProps = {}) {
           open={!!pendingLostDealId}
           onClose={() => setPendingLostDealId(null)}
           onSubmit={handleLostSubmit}
+        />
+      )}
+
+      {battlecardBrand && (
+        <AIBattlecardModal
+          open={!!battlecardBrand}
+          onClose={() => setBattlecardBrand(null)}
+          competitorBrand={battlecardBrand}
         />
       )}
     </div>

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import type { ReactNode } from 'react'
 import { MapPin, X } from 'lucide-react'
+import { AISummarizeButton } from './AISummarizeButton'
 
 export interface CustomerOption {
   id: string
@@ -196,7 +197,18 @@ export function VisitForm({ customers, initialData, onSave, onClose }: VisitForm
             </div>
 
             <div className="form-group full-width">
-              <label htmlFor="notes">บันทึก</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label htmlFor="notes" style={{ margin: 0 }}>บันทึก</label>
+                <AISummarizeButton
+                  rawText={form.notes}
+                  onSummarized={(data) => {
+                    handleChange('notes', data.customerNeeds)
+                    if (data.nextAction) {
+                      handleChange('nextStep', data.nextAction)
+                    }
+                  }}
+                />
+              </div>
               <textarea
                 id="notes"
                 rows={3}

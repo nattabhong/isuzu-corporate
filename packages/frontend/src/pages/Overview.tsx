@@ -13,6 +13,7 @@ import {
   Calendar,
   Target,
   BarChart3,
+  Sparkles,
 } from 'lucide-react'
 import {
   fetchCustomers,
@@ -521,6 +522,28 @@ export function Overview({ user }: OverviewProps) {
             />
           </>
         )}
+      </div>
+
+      {/* ===== AI Smart Pitch & Action Insights ===== */}
+      <div className="panel overview-section" style={{ background: 'linear-gradient(135deg, #111827 0%, #1F2937 100%)', color: '#fff', border: '1px solid #374151' }}>
+        <div className="section-header-bar" style={{ borderBottomColor: '#374151', color: '#fff' }}>
+          <Sparkles size={18} className="section-icon" color="#FCA5A5" />
+          <h2 style={{ color: '#fff' }}>✨ AI Co-Pilot — คำแนะนำกลยุทธ์การขายประจำวัน</h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
+          <div style={{ background: 'rgba(255,255,255,0.06)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h4 style={{ margin: '0 0 6px 0', color: '#FCA5A5', fontSize: '0.875rem' }}>🎯 กลยุทธ์เสนอขายรถฟลีท Isuzu D-Max 1.9 Ddi</h4>
+            <p style={{ margin: 0, fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: '1.4' }}>
+              เน้นย้ำจุดเด่น **Total Cost of Ownership (TCO)** ที่ประหยัดค่าน้ำมันและค่าซ่อมบำรุงในระยะยาวได้มากกว่าคู่แข่ง 15-20% สำหรับกลุ่มลูกค้าโลจิสติกส์และโรงงานในนิคมฯ ลำพูน
+            </p>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.06)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <h4 style={{ margin: '0 0 6px 0', color: '#6EE7B7', fontSize: '0.875rem' }}>⚡ โอกาสปิดการขายสูงสุดในสัปดาห์นี้</h4>
+            <p style={{ margin: 0, fontSize: '0.8125rem', color: '#D1D5DB', lineHeight: '1.4' }}>
+              ติดตามกลุ่มลูกค้า **Hot Leads ({summary.hotLeads} ราย)** ที่มีแผนซื้อภายใน 3 เดือน เร่งออกใบเสนอราคา (Quotation) และนำเสนอโปรแกรม ศาลาเชียงใหม่ Fast Track Service
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* ===== 2. Lead Heatmap ===== */}
