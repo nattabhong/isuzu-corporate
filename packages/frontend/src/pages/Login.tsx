@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { LogIn, Mail, Lock, User, KeyRound } from 'lucide-react'
+import { LogIn, Mail, Lock, User, KeyRound, Eye, EyeOff } from 'lucide-react'
 
 interface LoginProps {
   onLogin: (email: string, password: string) => Promise<unknown>
@@ -11,6 +11,7 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [name, setName] = useState('')
   const [inviteCode, setInviteCode] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -79,17 +80,40 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
 
           <div className="form-group">
             <label htmlFor="login-password">รหัสผ่าน</label>
-            <div className="login-input">
+            <div className="login-input" style={{ position: 'relative' }}>
               <Lock size={16} />
               <input
                 id="login-password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
+                style={{ paddingRight: '2.5rem' }}
               />
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '0.75rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#6B7280',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '4px',
+                  borderRadius: '4px',
+                }}
+                title={showPassword ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน'}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
 
