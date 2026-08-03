@@ -13,6 +13,7 @@ import { aiRoutes } from './routes/ai'
 
 type Env = {
   DB: D1Database
+  AI: any
   JWT_SECRET: string
   LINE_CHANNEL_ID: string
   LINE_CHANNEL_SECRET: string

@@ -126,8 +126,12 @@ aiRoutes.post('/chat', authMiddleware, async (c) => {
   let reply = ''
   let suggestedPrompts: string[] = []
 
+  // Debug c.env bindings
+  const envKeys = Object.keys(c.env || {})
+  const hasAI = Boolean(c.env?.AI)
+
   // 1. Try Cloudflare Worker AI Provider if binding exists
-  if (c.env.AI && typeof c.env.AI.run === 'function') {
+  if (hasAI && typeof c.env.AI.run === 'function') {
     try {
       const systemPrompt = `คุณเป็น AI Assistant ประจำระบบบริหารการขายฟลีทองค์กร Sala Corporate (บริษัท ศาลาเชียงใหม่ จำกัด ตัวแทนจำหน่ายรถยนต์ Isuzu)
 บริบทปัจจุบันที่ผู้ใช้อยู่คือหน้า: "${body.pageContext?.title || path}" (Path: ${path})
@@ -138,7 +142,7 @@ aiRoutes.post('/chat', authMiddleware, async (c) => {
 2. ช่วยเหลือเรื่องสเปครถยนต์ Isuzu (D-MAX, MU-X, รถบรรทุก ELF, FORWARD, GIGA), การเปรียบเทียบกับคู่แข่ง (Toyota Revo, Ford Ranger), การบริหารดีล และการดูแลลูกค้าฟลีท
 3. ให้คำแนะนำที่สอดคล้องกับบริบทของหน้าที่เปิดอยู่`
 
-      const aiRes: any = await c.env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+      const aiRes: any = await c.env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userMsg },
@@ -163,7 +167,8 @@ aiRoutes.post('/chat', authMiddleware, async (c) => {
           },
         })
       }
-    } catch {
+    } catch (err: any) {
+      console.error('Worker AI Error, falling back to domain engine:', err)
       // Fallback to domain intelligence engine below
     }
   }
@@ -250,6 +255,7 @@ aiRoutes.post('/chat', authMiddleware, async (c) => {
     data: {
       reply,
       suggestedPrompts,
+      debug: { envKeys, hasAI },
     },
   })
 })
