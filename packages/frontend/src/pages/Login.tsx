@@ -129,22 +129,8 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
           <span>เข้าสู่ระบบด้วย LINE</span>
         </button>
 
-        <p className="login-switch">
-          {mode === 'login' ? (
-            <>
-              ยังไม่มีบัญชี?{' '}
-              <button type="button" onClick={() => { setMode('register'); setError(null) }}>
-                สมัครสมาชิก
-              </button>
-            </>
-          ) : (
-            <>
-              มีบัญชีแล้ว?{' '}
-              <button type="button" onClick={() => { setMode('login'); setError(null) }}>
-                เข้าสู่ระบบ
-              </button>
-            </>
-          )}
+        <p className="login-switch" style={{ color: '#6B7280', fontSize: '0.875rem' }}>
+          หากยังไม่มีบัญชีเข้าใช้งาน กรุณาติดต่อผู้จัดการ (Manager) เพื่อรับรหัสเข้าใช้งาน
         </p>
 
         <p className="login-footer">สำหรับทีมขายองค์กร ศาลาเชียงใหม่</p>

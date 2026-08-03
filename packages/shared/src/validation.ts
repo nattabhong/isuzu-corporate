@@ -127,11 +127,13 @@ export const updateDealStageSchema = z.object({
 
 // Team
 export const createTeamMemberSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email().optional(),
+  name: z.string().min(1, 'กรุณากรอกชื่อ'),
+  email: z.string().email('กรุณากรอกอีเมลให้ถูกต้อง').optional().or(z.literal('')),
+  password: z.string().min(6, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร').optional().or(z.literal('')),
   phone: z.string().optional(),
   role: z.enum(['manager', 'sales_rep']).default('sales_rep'),
   territory: z.string().optional(),
+  salesTarget: z.number().optional(),
 })
 
 // Auth

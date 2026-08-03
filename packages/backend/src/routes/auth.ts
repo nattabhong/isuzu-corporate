@@ -59,63 +59,12 @@ async function issueSession(
 
 export const authRoutes = new Hono<{ Bindings: Env }>()
 
-// POST /api/auth/register — self-register with invite code
+// POST /api/auth/register — Public self-registration is disabled in favor of Manager-driven account creation
 authRoutes.post('/register', async (c) => {
-  let body: unknown
-  try {
-    body = await c.req.json()
-  } catch {
-    return c.json({ success: false, error: 'ข้อมูลไม่ถูกต้อง' }, 400)
-  }
-
-  const parsed = registerSchema.safeParse(body)
-  if (!parsed.success) {
-    return c.json({ success: false, error: parsed.error.issues[0].message }, 400)
-  }
-
-  const { name, email, password, inviteCode } = parsed.data
-
-  const inviteCodeExpected = c.env.INVITE_CODE || 'SALA2026'
-  if (inviteCode !== inviteCodeExpected) {
-    return c.json({ success: false, error: 'รหัสเชิญไม่ถูกต้อง' }, 403)
-  }
-
-  const db = resolveDb(c.env)
-  const normalizedEmail = email.toLowerCase()
-
-  // Check email not already used
-  const existing = await db.select().from(teamMembers)
-    .where(eq(teamMembers.email, normalizedEmail))
-    .limit(1)
-    .all()
-  if (existing.length > 0) {
-    return c.json({ success: false, error: 'อีเมลนี้ถูกใช้งานแล้ว' }, 409)
-  }
-
-  const passwordHash = await hashPassword(password)
-  const memberId = crypto.randomUUID()
-
-  await db.insert(teamMembers).values({
-    id: memberId,
-    lineUserId: `email_${memberId}`,
-    name,
-    email: normalizedEmail,
-    passwordHash,
-    role: 'sales_rep',
-    isActive: true,
-  }).run()
-
-  const token = await issueSession(db, memberId, 'sales_rep', name, c.env.JWT_SECRET || 'sala-corporate-secret-jwt-key-2026-secure')
-
-  setCookie(c, 'token', token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'Lax',
-    path: '/',
-    maxAge: 3600,
-  })
-
-  return c.json({ success: true, data: { id: memberId, name, role: 'sales_rep' } }, 201)
+  return c.json({
+    success: false,
+    error: 'ระบบปิดรับการสมัครสมาชิกสาธารณะ การสร้างบัญชีใหม่จะต้องดำเนินการโดยผู้จัดการ (Manager) เท่านั้น'
+  }, 403)
 })
 
 // POST /api/auth/login — email + password

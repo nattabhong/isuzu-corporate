@@ -431,10 +431,7 @@ describe('Auth Routes', () => {
   })
 
   describe('POST /api/auth/register', () => {
-    it('registers a new member with valid invite code', async () => {
-      const db = createDb()
-      const testEnv = { ...env(), DB: db as unknown as D1Database }
-
+    it('returns 403 indicating self-registration is disabled in favor of Manager creation', async () => {
       const app = createApp()
       const res = await app.request('/api/auth/register', {
         method: 'POST',
@@ -445,91 +442,12 @@ describe('Auth Routes', () => {
           password: 'secret123',
           inviteCode: TEST_INVITE_CODE,
         }),
-      }, testEnv)
-
-      expect(res.status).toBe(201)
-      const body = await res.json() as { success: boolean; data: { id: string; name: string; role: string } }
-      expect(body.success).toBe(true)
-      expect(body.data.name).toBe('สมชาย ใจดี')
-      expect(body.data.role).toBe('sales_rep')
-
-      // Verify member in DB with hashed password
-      const members = db.select().from(schema.teamMembers).all()
-      expect(members).toHaveLength(1)
-      expect(members[0].email).toBe('somchai@isuzu.co.th')
-      expect(members[0].passwordHash).toContain('pbkdf2$')
-      // Password must NOT be stored in plaintext
-      expect(members[0].passwordHash).not.toContain('secret123')
-
-      // Session created + cookie set
-      const sessions = db.select().from(schema.sessions).all()
-      expect(sessions).toHaveLength(1)
-      const cookies = res.headers.getSetCookie?.() ?? res.headers.get('Set-Cookie')
-      const cookieStr = Array.isArray(cookies) ? cookies.join('; ') : cookies
-      expect(cookieStr).toContain('token=')
-    })
-
-    it('rejects wrong invite code', async () => {
-      const db = createDb()
-      const testEnv = { ...env(), DB: db as unknown as D1Database }
-
-      const app = createApp()
-      const res = await app.request('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Test',
-          email: 'test@isuzu.co.th',
-          password: 'secret123',
-          inviteCode: 'wrong-code',
-        }),
-      }, testEnv)
-
-      expect(res.status).toBe(403)
-      const members = db.select().from(schema.teamMembers).all()
-      expect(members).toHaveLength(0)
-    })
-
-    it('rejects duplicate email', async () => {
-      const db = createDb()
-      db.insert(schema.teamMembers).values({
-        id: 'existing-1',
-        lineUserId: 'email_existing-1',
-        name: 'Existing',
-        email: 'dup@isuzu.co.th',
-        role: 'sales_rep',
-      }).run()
-
-      const testEnv = { ...env(), DB: db as unknown as D1Database }
-      const app = createApp()
-      const res = await app.request('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Dup',
-          email: 'DUP@isuzu.co.th',
-          password: 'secret123',
-          inviteCode: TEST_INVITE_CODE,
-        }),
-      }, testEnv)
-
-      expect(res.status).toBe(409)
-    })
-
-    it('rejects invalid email format', async () => {
-      const app = createApp()
-      const res = await app.request('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Test',
-          email: 'not-an-email',
-          password: 'secret123',
-          inviteCode: TEST_INVITE_CODE,
-        }),
       }, env())
 
-      expect(res.status).toBe(400)
+      expect(res.status).toBe(403)
+      const body = await res.json() as { success: boolean; error: string }
+      expect(body.success).toBe(false)
+      expect(body.error).toContain('ปิดรับการสมัครสมาชิกสาธารณะ')
     })
   })
 

@@ -61,11 +61,33 @@ teamRoutes.post('/', authMiddleware, requireManager, async (c) => {
     return c.json({ success: false, error: parsed.error.issues[0].message }, 400)
   }
 
+  const { password, ...memberData } = parsed.data
+
+  if (memberData.email) {
+    const normalizedEmail = memberData.email.toLowerCase()
+    const existing = await db.select().from(teamMembers)
+      .where(eq(teamMembers.email, normalizedEmail))
+      .limit(1)
+      .all()
+
+    if (existing.length > 0) {
+      return c.json({ success: false, error: 'อีเมลนี้ถูกใช้งานแล้ว' }, 409)
+    }
+    memberData.email = normalizedEmail
+  }
+
+  let passwordHash: string | undefined
+  if (password && password.length >= 6) {
+    const { hashPassword } = await import('../services/password')
+    passwordHash = await hashPassword(password)
+  }
+
   const id = crypto.randomUUID()
   await db.insert(teamMembers).values({
     id,
     lineUserId: `pending_${id}`, // Will be updated on first LINE login
-    ...parsed.data,
+    ...memberData,
+    ...(passwordHash ? { passwordHash } : {}),
   })
 
   const member = await db.query.teamMembers.findFirst({

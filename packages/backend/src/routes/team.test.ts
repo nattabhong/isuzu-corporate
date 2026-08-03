@@ -223,7 +223,7 @@ describe('Team Routes', () => {
       expect(res.status).toBe(403)
     })
 
-    it('manager creates member successfully (201)', async () => {
+    it('manager creates member successfully with password and hashes it (201)', async () => {
       const db = createDb()
       const token = await createToken('manager', 'mgr-1', 'Boss')
       const app = createTestApp()
@@ -236,6 +236,7 @@ describe('Team Routes', () => {
         body: JSON.stringify({
           name: 'Charlie',
           email: 'charlie@example.com',
+          password: 'password123',
           role: 'sales_rep',
           territory: 'Bangkok',
         }),
@@ -254,6 +255,32 @@ describe('Team Routes', () => {
       const members = db.select().from(schema.teamMembers).all()
       expect(members).toHaveLength(1)
       expect(members[0].name).toBe('Charlie')
+      expect(members[0].passwordHash).toContain('pbkdf2$')
+    })
+
+    it('rejects duplicate email when creating member', async () => {
+      const db = createDb()
+      seedMember(db, { id: 'm1', name: 'Existing', email: 'existing@example.com' })
+
+      const token = await createToken('manager', 'mgr-1', 'Boss')
+      const app = createTestApp()
+      const res = await app.request('/api/team', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: 'Dup User',
+          email: 'EXISTING@example.com',
+          password: 'password123',
+        }),
+      }, testEnv(db))
+
+      expect(res.status).toBe(409)
+      const body = await res.json() as { success: boolean; error: string }
+      expect(body.success).toBe(false)
+      expect(body.error).toBe('อีเมลนี้ถูกใช้งานแล้ว')
     })
 
     it('creates member with default role sales_rep', async () => {

@@ -59,27 +59,10 @@ describe('Login', () => {
     expect(await screen.findByText('อีเมลหรือรหัสผ่านไม่ถูกต้อง')).toBeInTheDocument()
   })
 
-  it('switches to register mode showing name and invite code fields', () => {
+  it('displays message directing users without an account to contact Manager', () => {
     render(<Login onLogin={noop} onLineLogin={vi.fn()} onRegister={noop} />)
 
-    fireEvent.click(screen.getByRole('button', { name: /สมัครสมาชิก/i }))
-
-    expect(screen.getByLabelText('ชื่อ')).toBeInTheDocument()
-    expect(screen.getByLabelText('รหัสเชิญ')).toBeInTheDocument()
-  })
-
-  it('submits registration with invite code', async () => {
-    const onRegister = vi.fn().mockResolvedValue(undefined)
-    render(<Login onLogin={noop} onLineLogin={vi.fn()} onRegister={onRegister} />)
-
-    fireEvent.click(screen.getByRole('button', { name: /สมัครสมาชิก/i }))
-    fireEvent.change(screen.getByLabelText('ชื่อ'), { target: { value: 'สมชาย ใจดี' } })
-    fireEvent.change(screen.getByLabelText('อีเมล'), { target: { value: 'somchai@sala.co.th' } })
-    fireEvent.change(screen.getByLabelText('รหัสผ่าน'), { target: { value: 'secret123' } })
-    fireEvent.change(screen.getByLabelText('รหัสเชิญ'), { target: { value: 'ISUZU2026' } })
-    fireEvent.click(screen.getByRole('button', { name: /สมัครสมาชิก/i }))
-
-    expect(onRegister).toHaveBeenCalledWith('สมชาย ใจดี', 'somchai@sala.co.th', 'secret123', 'ISUZU2026')
+    expect(screen.getByText(/หากยังไม่มีบัญชีเข้าใช้งาน กรุณาติดต่อผู้จัดการ/i)).toBeInTheDocument()
   })
 
   it('renders a descriptive subtitle in Thai', () => {
