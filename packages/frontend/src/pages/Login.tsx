@@ -33,6 +33,21 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
     }
   }
 
+  async function handleQuickLogin(demoEmail: string) {
+    setEmail(demoEmail)
+    setPassword('password123')
+    setMode('login')
+    setError(null)
+    setSubmitting(true)
+    try {
+      await onLogin(demoEmail, 'password123')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'เกิดข้อผิดพลาด กรุณาลองใหม่')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <div className="login-page">
       <div className="login-card panel">
@@ -150,13 +165,14 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
         <p className="login-footer">สำหรับทีมขายองค์กร ศาลาเชียงใหม่</p>
 
         <div style={{ marginTop: '16px', padding: '12px', background: '#F9FAFB', borderRadius: '10px', border: '1px solid #E5E7EB', textAlign: 'left', fontSize: '0.8125rem' }}>
-          <strong style={{ color: '#374151', display: 'block', marginBottom: '8px' }}>🔑 เลือกบัญชีทดสอบระบบ (Quick Demo Login):</strong>
+          <strong style={{ color: '#374151', display: 'block', marginBottom: '8px' }}>⚡ เข้าใช้งานทันที (1-Click Demo Login):</strong>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             <button
               type="button"
               className="btn btn-sm btn-secondary"
               style={{ width: '100%', justifyContent: 'flex-start', fontSize: '0.75rem', padding: '6px 10px' }}
-              onClick={() => { setEmail('admin@isuzu.co.th'); setPassword('password123'); setMode('login') }}
+              onClick={() => handleQuickLogin('admin@isuzu.co.th')}
+              disabled={submitting}
             >
               👑 ผู้จัดการ: admin@isuzu.co.th
             </button>
@@ -164,7 +180,8 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
               type="button"
               className="btn btn-sm btn-secondary"
               style={{ width: '100%', justifyContent: 'flex-start', fontSize: '0.75rem', padding: '6px 10px' }}
-              onClick={() => { setEmail('sales1@isuzu.co.th'); setPassword('password123'); setMode('login') }}
+              onClick={() => handleQuickLogin('sales1@isuzu.co.th')}
+              disabled={submitting}
             >
               👤 พนักงานขาย: sales1@isuzu.co.th
             </button>
@@ -172,7 +189,8 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
               type="button"
               className="btn btn-sm btn-secondary"
               style={{ width: '100%', justifyContent: 'flex-start', fontSize: '0.75rem', padding: '6px 10px' }}
-              onClick={() => { setEmail('nattabhong.kon@gmail.com'); setPassword('password123'); setMode('login') }}
+              onClick={() => handleQuickLogin('nattabhong.kon@gmail.com')}
+              disabled={submitting}
             >
               👤 แอดมิน: nattabhong.kon@gmail.com
             </button>

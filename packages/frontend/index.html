@@ -23,7 +23,7 @@
         // Unregister any old service worker cache to ensure instant UI update
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
           for (let registration of registrations) {
-            registration.update();
+            registration.unregister();
           }
         });
         window.addEventListener('load', () => {
