@@ -1,5 +1,5 @@
 // ISUZU Corporate CRM — Service Worker for PWA
-const CACHE_NAME = 'isuzu-crm-v3'
+const CACHE_NAME = 'isuzu-crm-v4-calendar'
 
 const PRECACHE_URLS = [
   '/',
