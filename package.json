@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --parallel -r dev",
-    "build": "pnpm -r build",
+    "build": "pnpm -r build && cp -r packages/frontend/dist ./dist",
     "check": "pnpm -r check",
     "test": "pnpm -r test"
   }
