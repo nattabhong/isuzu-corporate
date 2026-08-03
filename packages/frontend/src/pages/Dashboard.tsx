@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from '../components/Layout'
+import { AIChatWidget } from '../components/AIChatWidget'
 import { Overview } from './Overview'
 import { CalendarPage } from './CalendarPage'
 import { Customers } from './Customers'
@@ -37,6 +38,7 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
           </>
         )}
       </Routes>
+      <AIChatWidget user={user} />
     </Layout>
   )
 }

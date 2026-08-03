@@ -11,9 +11,7 @@ export interface AuthUser {
 }
 
 // Always use the absolute API URL — never rely on relative path proxying
-const API_BASE =
-  (import.meta.env.VITE_API_URL as string) ||
-  'https://sala-corporate-api.nattabhong-kon.workers.dev'
+const API_BASE = (import.meta.env.VITE_API_URL as string) || ''
 
 async function apiFetch(path: string, options: RequestInit = {}) {
   const token =
@@ -28,10 +26,12 @@ async function apiFetch(path: string, options: RequestInit = {}) {
 
   const url = `${API_BASE}${path}`
 
-  const res = await fetch(url, {
-    ...options,
-    headers,
-  })
+  const reqOptions: RequestInit = { ...options }
+  if (Object.keys(headers).length > 0) {
+    reqOptions.headers = headers
+  }
+
+  const res = await fetch(url, reqOptions)
 
   let data: unknown = null
   const text = await res.text().catch(() => '')
@@ -51,21 +51,18 @@ export function useAuth() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token')
-    if (!token) {
-      setLoading(false)
-      return
-    }
     apiFetch('/api/auth/me', { credentials: 'include' })
       .then(({ ok, data }) => {
         if (ok && (data as any)?.success && (data as any)?.data) {
           setUser((data as any).data)
         } else {
-          localStorage.removeItem('auth_token')
+          setUser(null)
+          if (typeof window !== 'undefined') localStorage.removeItem('auth_token')
         }
       })
       .catch(() => {
-        localStorage.removeItem('auth_token')
+        setUser(null)
+        if (typeof window !== 'undefined') localStorage.removeItem('auth_token')
       })
       .finally(() => setLoading(false))
   }, [])

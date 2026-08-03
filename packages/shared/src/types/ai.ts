@@ -27,3 +27,30 @@ export interface AISummarizeLogResponse {
   nextAction: string
   suggestedModel?: string
 }
+
+export interface ChatMessage {
+  id: string
+  sender: 'user' | 'assistant'
+  text: string
+  timestamp: string
+  suggestedActions?: string[]
+}
+
+export interface PageContext {
+  path: string
+  title?: string
+  entityId?: string
+  entityType?: 'customer' | 'deal' | 'report' | 'visit' | 'call' | 'general'
+}
+
+export interface AIChatRequest {
+  message: string
+  pageContext: PageContext
+  history?: { role: 'user' | 'assistant'; content: string }[]
+}
+
+export interface AIChatResponse {
+  reply: string
+  suggestedPrompts?: string[]
+  suggestedActions?: { label: string; action: string }[]
+}
