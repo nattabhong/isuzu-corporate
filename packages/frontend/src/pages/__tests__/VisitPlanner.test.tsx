@@ -94,8 +94,9 @@ describe('VisitPlanner', () => {
     expect(screen.getByText('ห้างหุ้นส่วน เชียงใหม่ขนส่ง')).toBeInTheDocument()
   })
 
-  it('renders status badges in Thai for each status', () => {
+  it('renders status badges in Thai for each status in table view', () => {
     render(<VisitPlanner userRole="sales_rep" initialPlans={mockPlans} />)
+    fireEvent.click(screen.getByRole('button', { name: /ตาราง/i }))
 
     expect(screen.getByText('ตามแผน')).toBeInTheDocument()
     expect(screen.getByText('สำเร็จ')).toBeInTheDocument()
@@ -103,8 +104,9 @@ describe('VisitPlanner', () => {
     expect(screen.getByText('เลื่อน')).toBeInTheDocument()
   })
 
-  it('renders planned dates', () => {
+  it('renders planned dates in table view', () => {
     render(<VisitPlanner userRole="sales_rep" initialPlans={mockPlans} />)
+    fireEvent.click(screen.getByRole('button', { name: /ตาราง/i }))
 
     expect(screen.getByText('10 ส.ค. 2026')).toBeInTheDocument()
     expect(screen.getByText('12 ส.ค. 2026')).toBeInTheDocument()
@@ -113,14 +115,15 @@ describe('VisitPlanner', () => {
   it('renders visit type labels', () => {
     render(<VisitPlanner userRole="sales_rep" initialPlans={mockPlans} />)
 
-    expect(screen.getByText('ติดตาม')).toBeInTheDocument()
-    expect(screen.getByText('เข้าเยี่ยมครั้งแรก')).toBeInTheDocument()
-    expect(screen.getByText('ปิดการขาย')).toBeInTheDocument()
-    expect(screen.getByText('บริการ')).toBeInTheDocument()
+    expect(screen.getAllByText('ติดตาม').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('เข้าเยี่ยมครั้งแรก').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('ปิดการขาย').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('บริการ').length).toBeGreaterThanOrEqual(1)
   })
 
-  it('renders table headers', () => {
+  it('renders table headers when switching to table view mode', () => {
     render(<VisitPlanner userRole="sales_rep" initialPlans={mockPlans} />)
+    fireEvent.click(screen.getByRole('button', { name: /ตาราง/i }))
 
     expect(screen.getByText('ลูกค้า')).toBeInTheDocument()
     expect(screen.getByText('วันที่')).toBeInTheDocument()
