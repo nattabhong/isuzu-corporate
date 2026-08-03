@@ -17,7 +17,7 @@ describe('Sidebar', () => {
 
     expect(screen.getByText('ภาพรวม')).toBeInTheDocument()
     expect(screen.getByText('ลูกค้าองค์กร')).toBeInTheDocument()
-    expect(screen.getByText('Visit')).toBeInTheDocument()
+    expect(screen.getByText('ปฏิทิน & Visit')).toBeInTheDocument()
     expect(screen.getByText('Call')).toBeInTheDocument()
     expect(screen.getByText('Pipeline')).toBeInTheDocument()
   })
@@ -41,7 +41,7 @@ describe('Sidebar', () => {
 
     expect(screen.getByText('ภาพรวม').closest('a')).toHaveAttribute('href', '/overview')
     expect(screen.getByText('ลูกค้าองค์กร').closest('a')).toHaveAttribute('href', '/customers')
-    expect(screen.getByText('Visit').closest('a')).toHaveAttribute('href', '/visits')
+    expect(screen.getByText('ปฏิทิน & Visit').closest('a')).toHaveAttribute('href', '/visits')
     expect(screen.getByText('Call').closest('a')).toHaveAttribute('href', '/calls')
     expect(screen.getByText('Pipeline').closest('a')).toHaveAttribute('href', '/deals')
   })

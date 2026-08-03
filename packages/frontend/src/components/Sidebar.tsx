@@ -8,7 +8,7 @@ interface SidebarProps {
 const commonItems = [
   { to: '/overview', label: 'ภาพรวม', icon: LayoutDashboard },
   { to: '/customers', label: 'ลูกค้าองค์กร', icon: Building2 },
-  { to: '/visits', label: 'Visit', icon: MapPin },
+  { to: '/visits', label: 'ปฏิทิน & Visit', icon: MapPin },
   { to: '/calls', label: 'Call', icon: Phone },
   { to: '/deals', label: 'Pipeline', icon: TrendingUp },
 ]
