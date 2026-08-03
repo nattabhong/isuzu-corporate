@@ -28,8 +28,9 @@ export function createApiClient(): ApiClient {
       'Content-Type': 'application/json',
     }
 
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`
+    const storedToken = token || (typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null)
+    if (storedToken) {
+      headers['Authorization'] = `Bearer ${storedToken}`
     }
 
     const controller = new AbortController()

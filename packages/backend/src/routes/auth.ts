@@ -110,12 +110,20 @@ authRoutes.post('/login', async (c) => {
     setCookie(c, 'token', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'Lax',
+      sameSite: 'None',
       path: '/',
       maxAge: 3600,
     })
 
-    return c.json({ success: true, data: { id: member.id, name: member.name, role: member.role } })
+    return c.json({
+      success: true,
+      data: {
+        id: member.id,
+        name: member.name,
+        role: member.role,
+        token,
+      },
+    })
   } catch (err) {
     const errorDetails = err instanceof Error ? `${err.message}\n${err.stack}` : String(err)
     return c.json({ success: false, error: errorDetails }, 500)

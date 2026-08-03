@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { api } from '../lib/api'
 
 export interface AuthUser {
   id: string
@@ -12,13 +13,23 @@ export interface AuthUser {
 const API_BASE = import.meta.env.VITE_API_URL || 'https://sala-corporate-api.nattabhong-kon.workers.dev'
 
 async function safeFetchJson(path: string, options: RequestInit = {}) {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null
+  const headers: Record<string, string> = options.headers ? { ...(options.headers as Record<string, string>) } : {}
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+
+  const mergedOptions: RequestInit = {
+    ...options,
+    ...(Object.keys(headers).length > 0 ? { headers } : {}),
+  }
+
   let res: Response
   try {
-    res = await fetch(path, options)
+    res = await fetch(path, mergedOptions)
   } catch {
-    // If relative path fails, try absolute backend API URL
     const fullUrl = path.startsWith('/') ? `${API_BASE}${path}` : path
-    res = await fetch(fullUrl, options)
+    res = await fetch(fullUrl, mergedOptions)
   }
 
   const text = await res.text().catch(() => '')
@@ -60,10 +71,14 @@ export function useAuth() {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: email.trim(), password }),
     })
     if (!ok || !data?.success) {
       throw new Error(data?.error || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')
+    }
+    if (data.data?.token) {
+      localStorage.setItem('auth_token', data.data.token)
+      api.setToken(data.data.token)
     }
     setUser(data.data)
     return data.data as AuthUser
@@ -74,10 +89,14 @@ export function useAuth() {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, inviteCode }),
+      body: JSON.stringify({ name: name.trim(), email: email.trim(), password, inviteCode: inviteCode.trim() }),
     })
     if (!ok || !data?.success) {
       throw new Error(data?.error || 'สมัครสมาชิกไม่สำเร็จ')
+    }
+    if (data.data?.token) {
+      localStorage.setItem('auth_token', data.data.token)
+      api.setToken(data.data.token)
     }
     setUser(data.data)
     return data.data as AuthUser
@@ -85,6 +104,8 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     await safeFetchJson('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    localStorage.removeItem('auth_token')
+    api.clearToken()
     setUser(null)
   }, [])
 
