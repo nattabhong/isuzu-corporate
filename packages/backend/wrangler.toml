@@ -5,7 +5,7 @@ compatibility_date = "2024-07-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "isuzu-corporate-db"
-database_id = "c923da29-735b-4c6b-8379-74bf2fe3f206"
+database_id = "0200a848-7a4d-4d79-9789-74469079ead5"
 
 # R2: enable in Dashboard first, then uncomment:
 # [[r2_buckets]]
