@@ -10,36 +10,31 @@ export interface AuthUser {
   territory?: string
 }
 
-const API_BASE = import.meta.env.VITE_API_URL
+// Always use the absolute API URL — never rely on relative path proxying
+const API_BASE =
+  (import.meta.env.VITE_API_URL as string) ||
+  'https://sala-corporate-api.nattabhong-kon.workers.dev'
 
-async function safeFetchJson(path: string, options: RequestInit = {}) {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null
-  const headers: Record<string, string> = options.headers ? { ...(options.headers as Record<string, string>) } : {}
+async function apiFetch(path: string, options: RequestInit = {}) {
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null
+
+  const headers: Record<string, string> = {
+    ...(options.headers as Record<string, string>),
+  }
   if (token) {
     headers['Authorization'] = `Bearer ${token}`
   }
 
-  const mergedOptions: RequestInit = {
+  const url = `${API_BASE}${path}`
+
+  const res = await fetch(url, {
     ...options,
-    ...(Object.keys(headers).length > 0 ? { headers } : {}),
-  }
+    headers,
+  })
 
-  let res: Response
-  let text = ''
-  try {
-    res = await fetch(path, mergedOptions)
-    text = await res.text().catch(() => '')
-    if (text.startsWith('<!doctype') || text.startsWith('<html')) {
-      throw new Error('HTML response from SPA server')
-    }
-  } catch {
-    const apiHost = API_BASE || 'https://sala-corporate-api.nattabhong-kon.workers.dev'
-    const targetUrl = path.startsWith('/') ? `${apiHost}${path}` : path
-    res = await fetch(targetUrl, mergedOptions)
-    text = await res.text().catch(() => '')
-  }
-
-  let data: any = null
+  let data: unknown = null
+  const text = await res.text().catch(() => '')
   if (text) {
     try {
       data = JSON.parse(text)
@@ -48,7 +43,7 @@ async function safeFetchJson(path: string, options: RequestInit = {}) {
     }
   }
 
-  return { ok: res.ok, status: res.status, data }
+  return { ok: res.ok, status: res.status, data: data as Record<string, unknown> }
 }
 
 export function useAuth() {
@@ -56,60 +51,79 @@ export function useAuth() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    safeFetchJson('/api/auth/me', { credentials: 'include' })
+    const token = localStorage.getItem('auth_token')
+    if (!token) {
+      setLoading(false)
+      return
+    }
+    apiFetch('/api/auth/me', { credentials: 'include' })
       .then(({ ok, data }) => {
-        if (ok && data?.success && data?.data) {
-          setUser(data.data)
+        if (ok && (data as any)?.success && (data as any)?.data) {
+          setUser((data as any).data)
+        } else {
+          localStorage.removeItem('auth_token')
         }
       })
       .catch(() => {
-        // Silently fail
+        localStorage.removeItem('auth_token')
       })
       .finally(() => setLoading(false))
   }, [])
 
   const lineLogin = useCallback(() => {
-    window.location.href = '/api/auth/line'
+    window.location.href = `${API_BASE}/api/auth/line`
   }, [])
 
   const login = useCallback(async (email: string, password: string) => {
-    const { ok, data } = await safeFetchJson('/api/auth/login', {
+    const { ok, data } = await apiFetch('/api/auth/login', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.trim(), password }),
+      body: JSON.stringify({ email: email.trim(), password: password.trim() }),
     })
-    if (!ok || !data?.success) {
-      throw new Error(data?.error || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')
+    if (!ok || !(data as any)?.success) {
+      throw new Error((data as any)?.error || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง')
     }
-    if (data.data?.token) {
-      localStorage.setItem('auth_token', data.data.token)
-      api.setToken(data.data.token)
+    const userData = (data as any).data
+    if (userData?.token) {
+      localStorage.setItem('auth_token', userData.token)
+      api.setToken(userData.token)
     }
-    setUser(data.data)
-    return data.data as AuthUser
+    setUser(userData)
+    return userData as AuthUser
   }, [])
 
-  const register = useCallback(async (name: string, email: string, password: string, inviteCode: string) => {
-    const { ok, data } = await safeFetchJson('/api/auth/register', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), email: email.trim(), password, inviteCode: inviteCode.trim() }),
-    })
-    if (!ok || !data?.success) {
-      throw new Error(data?.error || 'สมัครสมาชิกไม่สำเร็จ')
-    }
-    if (data.data?.token) {
-      localStorage.setItem('auth_token', data.data.token)
-      api.setToken(data.data.token)
-    }
-    setUser(data.data)
-    return data.data as AuthUser
-  }, [])
+  const register = useCallback(
+    async (name: string, email: string, password: string, inviteCode: string) => {
+      const { ok, data } = await apiFetch('/api/auth/register', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          inviteCode: inviteCode.trim(),
+        }),
+      })
+      if (!ok || !(data as any)?.success) {
+        throw new Error((data as any)?.error || 'สมัครสมาชิกไม่สำเร็จ')
+      }
+      const userData = (data as any).data
+      if (userData?.token) {
+        localStorage.setItem('auth_token', userData.token)
+        api.setToken(userData.token)
+      }
+      setUser(userData)
+      return userData as AuthUser
+    },
+    [],
+  )
 
   const logout = useCallback(async () => {
-    await safeFetchJson('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    await apiFetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(
+      () => {},
+    )
     localStorage.removeItem('auth_token')
     api.clearToken()
     setUser(null)
