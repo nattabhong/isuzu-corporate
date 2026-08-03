@@ -4,7 +4,7 @@ import { createDb } from '../db'
 import { monthlyTargets } from '../db/schema'
 import { authMiddleware } from '../middleware/auth'
 import { requireManager } from '../middleware/role-guard'
-import { upsertMonthlyTargetSchema } from '@isuzu-corporate/shared'
+import { upsertMonthlyTargetSchema } from '@sala-corporate/shared'
 import type { DbClient } from '../db'
 
 type Env = {

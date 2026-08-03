@@ -32,7 +32,7 @@ import type {
   Deal,
   TeamMember,
   MonthlyTarget,
-} from '@isuzu-corporate/shared'
+} from '@sala-corporate/shared'
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 

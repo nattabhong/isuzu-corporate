@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, X } from 'lucide-react'
 import { api } from '../lib/api'
-import { ISUZU_OFFICIAL_LINEUP } from '@isuzu-corporate/shared'
+import { ISUZU_OFFICIAL_LINEUP } from '@sala-corporate/shared'
 
 interface Deal {
   id: string

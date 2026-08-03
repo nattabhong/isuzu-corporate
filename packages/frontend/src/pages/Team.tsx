@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Users, UserPlus, ShieldCheck, UserCheck, Search, Lock, Edit3, UserX, UserCheck2, RefreshCw, Target, Phone, MapPin, Mail, AlertCircle, CheckCircle2, X } from 'lucide-react'
-import type { TeamMember } from '@isuzu-corporate/shared'
+import type { TeamMember } from '@sala-corporate/shared'
 
 export function Team() {
   const [members, setMembers] = useState<TeamMember[]>([])

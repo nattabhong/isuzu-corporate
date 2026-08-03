@@ -3,7 +3,7 @@ import { eq, sql } from 'drizzle-orm'
 import { createDb } from '../db'
 import { deals, customers, teamMembers } from '../db/schema'
 import { authMiddleware } from '../middleware/auth'
-import { createDealSchema, updateDealSchema, updateDealStageSchema } from '@isuzu-corporate/shared'
+import { createDealSchema, updateDealSchema, updateDealStageSchema } from '@sala-corporate/shared'
 import type { AuthUser } from '../middleware/auth'
 import type { DbClient } from '../db'
 

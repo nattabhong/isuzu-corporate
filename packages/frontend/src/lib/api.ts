@@ -1,5 +1,5 @@
 import { createApiClient } from './api-client'
-import type { ApiResponse, PaginatedResponse } from '@isuzu-corporate/shared'
+import type { ApiResponse, PaginatedResponse } from '@sala-corporate/shared'
 import type {
   Customer,
   CustomerDetail,
@@ -15,7 +15,7 @@ import type {
   SalesPerformance,
   CoverageGap,
   TeamLeaderboardEntry,
-} from '@isuzu-corporate/shared'
+} from '@sala-corporate/shared'
 
 export const api = createApiClient()
 

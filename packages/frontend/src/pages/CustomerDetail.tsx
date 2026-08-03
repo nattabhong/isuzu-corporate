@@ -22,9 +22,9 @@ import {
   updateContact,
   deleteContact,
 } from '../lib/api'
-import type { CustomerDetail as CustomerDetailType, CustomerContact } from '@isuzu-corporate/shared'
-import { LEAD_LEVEL_LABELS } from '@isuzu-corporate/shared'
-import type { LeadLevel } from '@isuzu-corporate/shared'
+import type { CustomerDetail as CustomerDetailType, CustomerContact } from '@sala-corporate/shared'
+import { LEAD_LEVEL_LABELS } from '@sala-corporate/shared'
+import type { LeadLevel } from '@sala-corporate/shared'
 
 function SegmentBadge({ segment }: { segment: string }) {
   return <span className={`badge badge-segment-${segment.toLowerCase()}`}>{segment}</span>

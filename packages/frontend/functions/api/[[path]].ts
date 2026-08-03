@@ -2,7 +2,7 @@
 // Cloudflare Pages Functions — proxy /api/* to the Workers backend
 // This keeps the frontend and API on the SAME origin so cookies work
 // (SameSite=Lax) and no CORS issues in production.
-const API_BASE = 'https://isuzu-corporate-api.copilot-ai.workers.dev'
+const API_BASE = 'https://sala-corporate-api.copilot-ai.workers.dev'
 
 export const onRequest: PagesFunction = async (context) => {
   try {

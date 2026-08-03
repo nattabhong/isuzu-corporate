@@ -1,5 +1,5 @@
 {
-  "name": "@isuzu-corporate/backend",
+  "name": "@sala-corporate/backend",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "db:seed": "echo 'Seed script not yet implemented — see Task 2'"
   },
   "dependencies": {
-    "@isuzu-corporate/shared": "workspace:*",
+    "@sala-corporate/shared": "workspace:*",
     "@libsql/client": "^0.8.0",
     "drizzle-orm": "^0.33.0",
     "hono": "^4.5.0",

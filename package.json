@@ -1,5 +1,5 @@
 {
-  "name": "isuzu-corporate",
+  "name": "sala-corporate",
   "private": true,
   "scripts": {
     "dev": "pnpm --parallel -r dev",

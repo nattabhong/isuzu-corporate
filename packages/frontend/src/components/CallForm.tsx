@@ -4,12 +4,12 @@ import {
   Truck, Wrench, ShoppingCart, Users, Briefcase, FileText,
   ChevronRight, AlertCircle
 } from 'lucide-react'
-import type { Customer } from '@isuzu-corporate/shared'
+import type { Customer } from '@sala-corporate/shared'
 import {
   USAGE_TYPES, MAIN_PROBLEMS, KEY_FACTORS, INTERESTED_SERVICES,
   NEXT_ACTIONS, INTERESTED_MODELS, PURCHASE_PURPOSES, LEAD_LEVELS,
   LEAD_LEVEL_LABELS, SERVICE_LOCATIONS, PURCHASE_TIMELINES,
-} from '@isuzu-corporate/shared'
+} from '@sala-corporate/shared'
 
 // ── Types ──
 

@@ -1,5 +1,5 @@
 {
-  "name": "@isuzu-corporate/frontend",
+  "name": "@sala-corporate/frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@isuzu-corporate/shared": "workspace:*",
+    "@sala-corporate/shared": "workspace:*",
     "hono": "^4.5.0",
     "lucide-react": "^0.400.0",
     "react": "^19.0.0",

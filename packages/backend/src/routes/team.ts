@@ -4,7 +4,7 @@ import { createDb } from '../db'
 import { teamMembers } from '../db/schema'
 import { authMiddleware } from '../middleware/auth'
 import { requireManager } from '../middleware/role-guard'
-import { createTeamMemberSchema } from '@isuzu-corporate/shared'
+import { createTeamMemberSchema } from '@sala-corporate/shared'
 import type { DbClient } from '../db'
 
 type Env = {

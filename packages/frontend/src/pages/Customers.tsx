@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Plus, Building2, X } from 'lucide-react'
+import { Search, Plus, Building2, X, Download } from 'lucide-react'
 import { fetchCustomers, createCustomer } from '../lib/api'
-import type { Customer } from '@isuzu-corporate/shared'
+import type { Customer } from '@sala-corporate/shared'
 
 const SEGMENTS = ['all', 'A', 'B', 'C'] as const
 const SEGMENT_LABELS: Record<string, string> = {
@@ -86,18 +86,43 @@ export function Customers() {
     }
   }
 
+  const handleExportCSV = () => {
+    let csvContent = '\uFEFF'
+    csvContent += 'ชื่อบริษัท/องค์กร,Segment,จังหวัด,สถานะ\n'
+    customers.forEach((c) => {
+      csvContent += `"${c.name}",${c.segment},"${c.province}",${c.status}\n`
+    })
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `customers-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+  }
+
   return (
     <div className="page customers-page">
       <div className="page-header">
         <h1>ลูกค้าองค์กร</h1>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => setShowModal(true)}
-        >
-          <Plus size={18} />
-          <span>เพิ่มลูกค้า</span>
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleExportCSV}
+          >
+            <Download size={18} />
+            <span>ส่งออก CSV</span>
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setShowModal(true)}
+          >
+            <Plus size={18} />
+            <span>เพิ่มลูกค้า</span>
+          </button>
+        </div>
       </div>
 
       <div className="customers-filters panel">

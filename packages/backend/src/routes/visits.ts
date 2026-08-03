@@ -10,7 +10,7 @@ import {
   updateVisitPlanSchema,
   updateVisitLogSchema,
   generateVisitPlansSchema,
-} from '@isuzu-corporate/shared'
+} from '@sala-corporate/shared'
 import type { DbClient } from '../db'
 
 type Env = {

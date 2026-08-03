@@ -4,7 +4,7 @@ import {
 } from 'lucide-react'
 import { CallForm, type CallFormData } from '../components/CallForm'
 import { api, fetchCustomers, fetchTeamMembers } from '../lib/api'
-import type { Customer, CallPlan, TeamMember } from '@isuzu-corporate/shared'
+import type { Customer, CallPlan, TeamMember } from '@sala-corporate/shared'
 
 // ── Types ──
 

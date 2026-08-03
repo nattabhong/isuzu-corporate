@@ -25,7 +25,7 @@ import type {
   SalesPerformance,
   CoverageGap,
   TeamLeaderboardEntry,
-} from '@isuzu-corporate/shared'
+} from '@sala-corporate/shared'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

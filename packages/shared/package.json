@@ -1,5 +1,5 @@
 {
-  "name": "@isuzu-corporate/shared",
+  "name": "@sala-corporate/shared",
   "version": "0.0.0",
   "type": "module",
   "main": "./src/index.ts",

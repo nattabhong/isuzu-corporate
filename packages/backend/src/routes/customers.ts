@@ -9,7 +9,7 @@ import {
   updateCustomerSchema,
   createContactSchema,
   updateContactSchema,
-} from '@isuzu-corporate/shared'
+} from '@sala-corporate/shared'
 import type { DbClient } from '../db'
 
 type Env = {

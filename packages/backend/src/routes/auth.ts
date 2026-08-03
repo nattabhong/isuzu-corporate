@@ -7,7 +7,7 @@ import { teamMembers, sessions } from '../db/schema'
 import { exchangeLineCode, getLineProfile } from '../services/line-auth'
 import { hashPassword, verifyPassword } from '../services/password'
 import { authMiddleware } from '../middleware/auth'
-import { loginSchema, registerSchema } from '@isuzu-corporate/shared'
+import { loginSchema, registerSchema } from '@sala-corporate/shared'
 import type { DbClient } from '../db'
 
 type Env = {
