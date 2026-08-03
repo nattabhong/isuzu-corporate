@@ -181,19 +181,20 @@ export function AIChatWidget({ user }: AIChatWidgetProps) {
 
   return (
     <div className="ai-chat-widget-container">
-      {/* Floating Toggle Button */}
+      {/* Floating Toggle Button (Circular) */}
       {!isOpen && (
         <button
           type="button"
-          className="ai-chat-floating-btn"
+          className="ai-chat-floating-circle-btn"
           onClick={() => setIsOpen(true)}
-          title="เปิด AI Assistant ผู้ช่วยงานขาย"
+          title={`เปิด AI Assistant ผู้ช่วย (${contextTitle})`}
           aria-label="เปิด AI Assistant"
         >
           <div className="ai-btn-glow" />
-          <Bot size={24} />
-          <span className="ai-btn-label">AI Assistant</span>
-          <span className="ai-context-badge">{contextTitle.split(' ')[0]}</span>
+          <Bot size={26} />
+          <span className="ai-circle-badge" title={contextTitle}>
+            <Sparkles size={10} />
+          </span>
         </button>
       )}
 

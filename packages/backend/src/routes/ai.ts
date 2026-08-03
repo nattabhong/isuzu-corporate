@@ -3,7 +3,7 @@ import { authMiddleware } from '../middleware/auth'
 import { COMPETITOR_BATTLECARDS, DEFAULT_BATTLECARD } from '@sala-corporate/shared'
 import type { AISummarizeLogResponse } from '@sala-corporate/shared'
 
-export const aiRoutes = new Hono()
+export const aiRoutes = new Hono<{ Bindings: { AI?: any } }>()
 
 // POST /api/ai/battlecard — get competitive battlecard for competitor brand
 aiRoutes.post('/battlecard', authMiddleware, async (c) => {
@@ -125,6 +125,48 @@ aiRoutes.post('/chat', authMiddleware, async (c) => {
   const lower = userMsg.toLowerCase()
   let reply = ''
   let suggestedPrompts: string[] = []
+
+  // 1. Try Cloudflare Worker AI Provider if binding exists
+  if (c.env.AI && typeof c.env.AI.run === 'function') {
+    try {
+      const systemPrompt = `คุณเป็น AI Assistant ประจำระบบบริหารการขายฟลีทองค์กร Sala Corporate (บริษัท ศาลาเชียงใหม่ จำกัด ตัวแทนจำหน่ายรถยนต์ Isuzu)
+บริบทปัจจุบันที่ผู้ใช้อยู่คือหน้า: "${body.pageContext?.title || path}" (Path: ${path})
+ผู้ใช้งานคือคุณ ${currentUser?.name || 'ทีมขาย'} (ตำแหน่ง: ${currentUser?.role || 'sales'})
+
+หน้าที่ของคุณ:
+1. ตอบคำถามภาษาไทยอย่างสุภาพ กระชับ ถูกต้อง และเป็นมืออาชีพ
+2. ช่วยเหลือเรื่องสเปครถยนต์ Isuzu (D-MAX, MU-X, รถบรรทุก ELF, FORWARD, GIGA), การเปรียบเทียบกับคู่แข่ง (Toyota Revo, Ford Ranger), การบริหารดีล และการดูแลลูกค้าฟลีท
+3. ให้คำแนะนำที่สอดคล้องกับบริบทของหน้าที่เปิดอยู่`
+
+      const aiRes: any = await c.env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMsg },
+        ],
+        max_tokens: 512,
+      })
+
+      const rawReply = aiRes?.response || aiRes?.reply || aiRes?.description
+      if (rawReply && typeof rawReply === 'string' && rawReply.trim().length > 0) {
+        reply = rawReply.trim()
+        if (path.includes('/customers')) suggestedPrompts = ['วิธีจัดกลุ่มลูกค้าเกรด A/B/C', 'สคริปต์โทรติดตามลูกค้ารายใหญ่']
+        else if (path.includes('/deals')) suggestedPrompts = ['วิธีเปรียบเทียบ TCO กับ Toyota Revo', 'เทคนิคเสนอราคาไม่ตัดราคาแข่ง']
+        else if (path.includes('/reports')) suggestedPrompts = ['สรุป KPI ของทีมขายเดือนนี้', 'กลยุทธ์เพิ่ม Conversion Rate']
+        else suggestedPrompts = ['เปรียบเทียบจุดเด่น Isuzu กับ Toyota Revo', 'หลักการคำนวณค่างวด & ดอกเบี้ยฟลีท']
+
+        return c.json({
+          success: true,
+          data: {
+            reply,
+            suggestedPrompts,
+            provider: 'cloudflare-worker-ai',
+          },
+        })
+      }
+    } catch {
+      // Fallback to domain intelligence engine below
+    }
+  }
 
   // 1. Path-based & Keyword Intelligence Engine
   if (lower.includes('revo') || lower.includes('โตโยต้า') || lower.includes('toyota')) {

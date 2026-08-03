@@ -20,5 +20,8 @@ database_id = "0200a848-7a4d-4d79-9789-74469079ead5"
 JWT_SECRET = "sala-corporate-secret-jwt-key-2026-secure"
 INVITE_CODE = "SALA2026"
 
+[ai]
+binding = "AI"
+
 [env.production]
 # Override for production
