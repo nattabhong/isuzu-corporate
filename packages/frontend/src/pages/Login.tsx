@@ -116,6 +116,28 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
             <LogIn size={18} />
             <span>{submitting ? 'กำลังดำเนินการ...' : mode === 'login' ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก'}</span>
           </button>
+
+          <button
+            type="button"
+            className="login-button"
+            style={{ marginTop: '0.75rem', backgroundColor: '#1E293B', borderColor: '#334155' }}
+            onClick={async () => {
+              setEmail('nattabhong.kon@gmail.com')
+              setPassword('isuzucms1234')
+              setSubmitting(true)
+              setError(null)
+              try {
+                await onLogin('nattabhong.kon@gmail.com', 'isuzucms1234')
+              } catch (err) {
+                setError(err instanceof Error ? err.message : 'เกิดข้อผิดพลาด')
+              } finally {
+                setSubmitting(false)
+              }
+            }}
+          >
+            <KeyRound size={18} />
+            <span>🔑 เข้าสู่ระบบด่วน (Admin Quick Login)</span>
+          </button>
         </form>
 
         <div className="login-divider">

