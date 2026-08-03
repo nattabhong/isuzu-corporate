@@ -28,6 +28,14 @@ app.use('*', cors({
   credentials: true,
 }))
 
+app.onError((err, c) => {
+  console.error('Unhandled Server Error:', err)
+  return c.json({
+    success: false,
+    error: err instanceof Error ? `${err.name}: ${err.message}\n${err.stack}` : String(err),
+  }, 500)
+})
+
 // Health check
 app.get('/api/health', (c) => c.json({ success: true, timestamp: new Date().toISOString() }))
 

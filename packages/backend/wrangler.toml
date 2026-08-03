@@ -16,5 +16,9 @@ database_id = "c923da29-735b-4c6b-8379-74bf2fe3f206"
 #   JWT_SECRET, LINE_CHANNEL_ID, LINE_CHANNEL_SECRET,
 #   LINE_CHANNEL_ACCESS_TOKEN, GOOGLE_MAPS_API_KEY, MCP_API_KEY, INVITE_CODE
 
+[vars]
+JWT_SECRET = "sala-corporate-secret-jwt-key-2026-secure"
+INVITE_CODE = "SALA2026"
+
 [env.production]
 # Override for production

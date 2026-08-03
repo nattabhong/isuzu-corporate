@@ -20,7 +20,8 @@ export const authMiddleware = createMiddleware<{
   }
 
   try {
-    const secret = new TextEncoder().encode(c.env.JWT_SECRET)
+    const jwtSecret = c.env.JWT_SECRET || 'sala-corporate-secret-jwt-key-2026-secure'
+    const secret = new TextEncoder().encode(jwtSecret)
     const { payload } = await jwtVerify(token, secret)
     // Runtime validation of JWT payload shape
     if (
