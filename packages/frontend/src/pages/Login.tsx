@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { LogIn, Truck, Mail, Lock, User, KeyRound } from 'lucide-react'
+import { LogIn, Mail, Lock, User, KeyRound } from 'lucide-react'
 
 interface LoginProps {
   onLogin: (email: string, password: string) => Promise<unknown>
@@ -37,10 +37,10 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
     <div className="login-page">
       <div className="login-card panel">
         <div className="login-branding">
-          <div className="login-logo">
-            <Truck size={48} strokeWidth={1.5} color="var(--accent)" />
+          <div className="login-logo-container">
+            <img src="/logo.png" alt="Sala Corporate Logo" className="login-logo-img" />
           </div>
-          <h1>ISUZU Corporate</h1>
+          <h1>Sala Corporate</h1>
           <p>ระบบบริหารการขายและการดูแลลูกค้าองค์กร</p>
         </div>
 
@@ -147,7 +147,7 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
           )}
         </p>
 
-        <p className="login-footer">สำหรับทีมขายองค์กร อีซูซุ</p>
+        <p className="login-footer">สำหรับทีมขายองค์กร ศาลาเชียงใหม่</p>
       </div>
     </div>
   )

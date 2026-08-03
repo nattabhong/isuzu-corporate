@@ -714,6 +714,22 @@ body {
   margin: 0 auto 16px auto;
 }
 
+.login-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px auto;
+  max-width: 240px;
+  padding: 8px;
+}
+
+.login-logo-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
+}
+
 .login-branding h1 {
   font-size: 1.75rem;
   font-weight: 700;
@@ -2494,6 +2510,12 @@ body {
   color: var(--fg);
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
   letter-spacing: -0.01em;
+}
+
+.sidebar-logo-img {
+  max-height: 38px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .sidebar nav ul {

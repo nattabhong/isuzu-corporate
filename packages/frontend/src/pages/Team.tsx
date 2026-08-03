@@ -441,7 +441,7 @@ export function Team() {
                 <input
                   type="email"
                   required
-                  placeholder="somchai@isuzu.co.th"
+                  placeholder="somchai@sala.co.th"
                   value={formEmail}
                   onChange={(e) => setFormEmail(e.target.value)}
                 />

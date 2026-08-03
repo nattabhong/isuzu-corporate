@@ -69,7 +69,7 @@ async function notifyCustomerReps(
   if (customer.assignedTo) {
     const rep = await db.select().from(teamMembers).where(eq(teamMembers.id, customer.assignedTo)).get()
     if (rep?.lineUserId) {
-      const fullMessage = `📋 *ISUZU Corporate CRM*\n\n${message}\n\nลูกค้า: ${customer.name}\nSegment: ${customer.segment}`
+      const fullMessage = `📋 *Sala Corporate CRM*\n\n${message}\n\nลูกค้า: ${customer.name}\nSegment: ${customer.segment}`
       const ok = await sendLineMessage(accessToken, rep.lineUserId, [
         { type: 'text', text: fullMessage },
       ])
@@ -292,7 +292,7 @@ export async function sendDailySummary(env: Env): Promise<{ notified: number; er
     )).get(),
   ])
 
-  const message = `📊 *ISUZU Corporate — สรุปประจำวัน ${today}*\n\n` +
+  const message = `📊 *Sala Corporate — สรุปประจำวัน ${today}*\n\n` +
     `✅ วันนี้เข้าเยี่ยม: ${todayVisits?.count ?? 0} ครั้ง\n` +
     `📞 วันนี้โทร: ${todayCalls?.count ?? 0} ครั้ง\n` +
     `💰 ดีลที่กำลังดำเนินการ: ${activeDeals?.count ?? 0} ดีล\n` +

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Users, Settings, Truck } from 'lucide-react'
+import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Users, Settings } from 'lucide-react'
 
 interface SidebarProps {
   role: 'admin' | 'manager' | 'sales_rep'
@@ -25,8 +25,7 @@ export function Sidebar({ role }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <Truck size={22} color="var(--accent)" />
-        <span>ISUZU Corporate</span>
+        <img src="/logo.png" alt="Sala Corporate Logo" className="sidebar-logo-img" />
       </div>
       <nav>
         <ul>

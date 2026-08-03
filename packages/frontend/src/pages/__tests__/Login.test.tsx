@@ -5,10 +5,10 @@ import { Login } from '../Login'
 const noop = async () => {}
 
 describe('Login', () => {
-  it('renders ISUZU branding', () => {
+  it('renders Sala branding', () => {
     render(<Login onLogin={noop} onLineLogin={vi.fn()} onRegister={noop} />)
 
-    expect(screen.getByText('ISUZU Corporate')).toBeInTheDocument()
+    expect(screen.getByText('Sala Corporate')).toBeInTheDocument()
   })
 
   it('renders email and password inputs', () => {
@@ -39,12 +39,12 @@ describe('Login', () => {
     const onLogin = vi.fn().mockResolvedValue(undefined)
     render(<Login onLogin={onLogin} onLineLogin={vi.fn()} onRegister={noop} />)
 
-    fireEvent.change(screen.getByLabelText('อีเมล'), { target: { value: 'somchai@isuzu.co.th' } })
+    fireEvent.change(screen.getByLabelText('อีเมล'), { target: { value: 'somchai@sala.co.th' } })
     fireEvent.change(screen.getByLabelText('รหัสผ่าน'), { target: { value: 'secret123' } })
     const form = screen.getByRole('form', { name: 'แบบฟอร์มเข้าสู่ระบบ' })
     fireEvent.submit(form)
 
-    expect(onLogin).toHaveBeenCalledWith('somchai@isuzu.co.th', 'secret123')
+    expect(onLogin).toHaveBeenCalledWith('somchai@sala.co.th', 'secret123')
   })
 
   it('shows error message when login fails', async () => {
@@ -74,12 +74,12 @@ describe('Login', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /สมัครสมาชิก/i }))
     fireEvent.change(screen.getByLabelText('ชื่อ'), { target: { value: 'สมชาย ใจดี' } })
-    fireEvent.change(screen.getByLabelText('อีเมล'), { target: { value: 'somchai@isuzu.co.th' } })
+    fireEvent.change(screen.getByLabelText('อีเมล'), { target: { value: 'somchai@sala.co.th' } })
     fireEvent.change(screen.getByLabelText('รหัสผ่าน'), { target: { value: 'secret123' } })
     fireEvent.change(screen.getByLabelText('รหัสเชิญ'), { target: { value: 'ISUZU2026' } })
     fireEvent.click(screen.getByRole('button', { name: /สมัครสมาชิก/i }))
 
-    expect(onRegister).toHaveBeenCalledWith('สมชาย ใจดี', 'somchai@isuzu.co.th', 'secret123', 'ISUZU2026')
+    expect(onRegister).toHaveBeenCalledWith('สมชาย ใจดี', 'somchai@sala.co.th', 'secret123', 'ISUZU2026')
   })
 
   it('renders a descriptive subtitle in Thai', () => {

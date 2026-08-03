@@ -1,7 +1,7 @@
 {
-  "name": "ISUZU Corporate CRM",
-  "short_name": "ISUZU CRM",
-  "description": "ISUZU Corporate — ระบบบริหารความสัมพันธ์ลูกค้าองค์กร",
+  "name": "Sala Corporate CRM",
+  "short_name": "Sala CRM",
+  "description": "Sala Corporate — ระบบบริหารความสัมพันธ์ลูกค้าองค์กร",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

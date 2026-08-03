@@ -12,7 +12,7 @@ export function TopBar({ user, onLogout }: TopBarProps) {
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <span className="topbar-brand-title">ISUZU Corporate CRM</span>
+        <span className="topbar-brand-title">Sala Corporate CRM</span>
       </div>
       <div className="topbar-user">
         <div className="user-avatar-badge">
