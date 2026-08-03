@@ -31,6 +31,8 @@ export const customers = sqliteTable('customers', {
   segment: text('segment', { enum: ['A', 'B', 'C'] }).notNull().default('B'),
   assignedTo: text('assigned_to').references(() => teamMembers.id),
   status: text('status', { enum: ['active', 'inactive', 'prospect'] }).notNull().default('active'),
+  fleetContractExpiry: text('fleet_contract_expiry'),
+  zone: text('zone'),
   createdAt: text('created_at').notNull().default(sql`(datetime('now'))`),
   updatedAt: text('updated_at').notNull().default(sql`(datetime('now'))`),
 })
@@ -165,6 +167,9 @@ export const deals = sqliteTable('deals', {
   expectedCloseDate: text('expected_close_date'),
   wonAmount: real('won_amount'),
   notes: text('notes'),
+  lostReason: text('lost_reason'),
+  competitorBrand: text('competitor_brand'),
+  discountAmount: real('discount_amount'),
   sourceCallLogId: text('source_call_log_id').references(() => callLogs.id),
   sourceVisitLogId: text('source_visit_log_id').references(() => visitLogs.id),
   createdAt: text('created_at').notNull().default(sql`(datetime('now'))`),

@@ -18,6 +18,8 @@ const STATUS_LABELS: Record<string, string> = {
   prospect: 'Prospect',
 }
 
+const ZONES = ['all', 'เมืองเชียงใหม่', 'นิคมฯ ลำพูน', 'แม่ริม/แม่แตง', 'หางดง/สันป่าตอง', 'ต่างจังหวัด'] as const
+
 function SegmentBadge({ segment }: { segment: string }) {
   return <span className={`badge badge-segment-${segment.toLowerCase()}`}>{segment}</span>
 }
@@ -33,6 +35,7 @@ export function Customers() {
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [segment, setSegment] = useState<string>('all')
+  const [selectedZone, setSelectedZone] = useState<string>('all')
   const [status, setStatus] = useState<string>('')
   const [showModal, setShowModal] = useState(false)
   const [submitting, setSubmitting] = useState(false)

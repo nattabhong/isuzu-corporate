@@ -11,6 +11,8 @@ export interface Customer {
   segment: 'A' | 'B' | 'C'
   assignedTo: string | null
   status: 'active' | 'inactive' | 'prospect'
+  fleetContractExpiry?: string | null
+  zone?: string | null
   createdAt: string
   updatedAt: string
 }

@@ -616,6 +616,36 @@ export function Overview({ user }: OverviewProps) {
         )}
       </div>
 
+      {/* ===== Fleet Renewal Alerts ===== */}
+      <div className="panel overview-section">
+        <div className="section-header-bar">
+          <Calendar size={18} className="section-icon" color="#E65100" />
+          <h2>🔔 แจ้งเตือนรอบเปลี่ยนรถฟลีท (Fleet Expiry Alerts)</h2>
+        </div>
+        {customers.filter(c => c.fleetContractExpiry).length === 0 ? (
+          <div className="empty-state">
+            <Calendar size={32} />
+            <p>ยังไม่มีข้อมูลฟลีทที่ใกล้หมดอายุในระยะนี้</p>
+          </div>
+        ) : (
+          <div className="activity-list">
+            {customers.filter(c => c.fleetContractExpiry).map((cust) => (
+              <div key={cust.id} className="activity-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <strong>{cust.name}</strong> ({cust.province || 'ไม่ระบุจังหวัด'})
+                  <p style={{ margin: '2px 0 0 0', fontSize: '0.8125rem', color: 'var(--fg-2)' }}>
+                    วันหมดอายุสัญญาฟลีท: {new Date(cust.fleetContractExpiry!).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </p>
+                </div>
+                <span className="badge" style={{ background: '#FFF3E0', color: '#E65100', border: '1px solid #FFE0B2' }}>
+                  ติดตามนำเสนอ Isuzu ใหม่
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* ===== 4. Recent Activity ===== */}
       <div className="panel overview-section">
         <div className="section-header-bar">

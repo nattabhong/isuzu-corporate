@@ -159,7 +159,12 @@ dealsRoutes.patch('/:id/stage', authMiddleware, async (c) => {
     return c.json({ success: false, error: 'ไม่พบดีล' }, 404)
   }
 
-  const updateData: Record<string, unknown> = { stage: parsed.data.stage, updatedAt: new Date().toISOString() }
+  const updateData: Record<string, unknown> = {
+    stage: parsed.data.stage,
+    lostReason: parsed.data.lostReason || null,
+    competitorBrand: parsed.data.competitorBrand || null,
+    updatedAt: new Date().toISOString(),
+  }
   if (parsed.data.stage === 'won') {
     updateData.wonAmount = existing.expectedAmount
   }

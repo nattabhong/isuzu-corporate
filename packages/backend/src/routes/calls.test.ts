@@ -57,6 +57,8 @@ function createDb() {
       segment TEXT NOT NULL DEFAULT 'B',
       assigned_to TEXT REFERENCES team_members(id),
       status TEXT NOT NULL DEFAULT 'active',
+        fleet_contract_expiry TEXT,
+        zone TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
     )
@@ -97,6 +99,9 @@ function createDb() {
       fleet_total INTEGER,
       usage_types TEXT,
       usage_status_notes TEXT,
+        lost_reason TEXT,
+        competitor_brand TEXT,
+        discount_amount REAL,
       has_problem_vehicles INTEGER,
       problem_count INTEGER,
       problem_details TEXT,

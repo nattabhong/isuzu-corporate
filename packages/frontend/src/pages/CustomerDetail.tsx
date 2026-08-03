@@ -213,6 +213,21 @@ export function CustomerDetail() {
         </div>
       </div>
 
+      {customer.fleetContractExpiry && (
+        <div className="panel fleet-alert-banner" style={{ background: 'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)', border: '1px solid #FFE0B2', borderRadius: '16px', padding: '16px 20px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Calendar size={24} color="#E65100" />
+            <div>
+              <h4 style={{ margin: 0, color: '#E65100' }}>🔔 แจ้งเตือนรอบเปลี่ยนรถฟลีท (Fleet Contract Expiry)</h4>
+              <p style={{ margin: '4px 0 0 0', fontSize: '0.875rem', color: '#5D4037' }}>
+                สัญญาฟลีทปัจจุบันจะหมดอายุวันที่ <strong>{new Date(customer.fleetContractExpiry).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</strong> — ควรเข้าพบและนำเสนอรถ Isuzu รุ่นใหม่ทดแทน
+              </p>
+            </div>
+          </div>
+          <span className="badge" style={{ background: '#E65100', color: '#fff', padding: '6px 12px', borderRadius: '20px', fontWeight: 'bold' }}>ใกล้ครบสัญญา</span>
+        </div>
+      )}
+
       <div className="detail-grid">
         {/* Contacts Section */}
         <div className="detail-section panel">

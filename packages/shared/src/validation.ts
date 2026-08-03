@@ -16,6 +16,8 @@ export const createCustomerSchema = z.object({
   district: z.string().optional(),
   segment: z.enum(['A', 'B', 'C']).default('B'),
   assignedTo: z.string().optional(),
+  fleetContractExpiry: z.string().optional(),
+  zone: z.string().optional(),
 })
 
 export const updateCustomerSchema = createCustomerSchema.partial()
@@ -112,10 +114,15 @@ export const updateDealSchema = z.object({
   expectedCloseDate: z.string().optional(),
   notes: z.string().optional(),
   salesRepId: z.string().optional(),
+  lostReason: z.string().optional(),
+  competitorBrand: z.string().optional(),
+  discountAmount: z.number().optional(),
 })
 
 export const updateDealStageSchema = z.object({
   stage: z.enum(DEAL_STAGES),
+  lostReason: z.string().optional(),
+  competitorBrand: z.string().optional(),
 })
 
 // Team

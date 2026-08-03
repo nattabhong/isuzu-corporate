@@ -9,6 +9,9 @@ export interface Deal {
   expectedCloseDate: string | null
   wonAmount: number | null
   notes: string | null
+  lostReason?: string | null
+  competitorBrand?: string | null
+  discountAmount?: number | null
   sourceCallLogId: string | null
   sourceVisitLogId: string | null
   createdAt: string

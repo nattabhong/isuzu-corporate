@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, FileText } from 'lucide-react'
 import { api } from '../lib/api'
 import { ISUZU_OFFICIAL_LINEUP } from '@sala-corporate/shared'
+import { QuotationModal } from '../components/QuotationModal'
+import { LostDealModal } from '../components/LostDealModal'
 
 interface Deal {
   id: string
@@ -66,6 +68,10 @@ export function Deals({ userRole }: DealsProps = {}) {
   const [showModal, setShowModal] = useState(false)
   const [repFilter, setRepFilter] = useState<string>('')
   const [dragOverStage, setDragOverStage] = useState<string | null>(null)
+
+  // Feature Modal state
+  const [quoteDeal, setQuoteDeal] = useState<Deal | null>(null)
+  const [pendingLostDealId, setPendingLostDealId] = useState<string | null>(null)
 
   // Form state
   const [formCustomerId, setFormCustomerId] = useState('')
@@ -167,6 +173,11 @@ export function Deals({ userRole }: DealsProps = {}) {
     const deal = deals.find((d) => d.id === dealId)
     if (!deal || deal.stage === stage) return
 
+    if (stage === 'lost') {
+      setPendingLostDealId(dealId)
+      return
+    }
+
     try {
       await api.patch(`/api/deals/${dealId}/stage`, { stage })
       // Optimistic update
@@ -175,6 +186,22 @@ export function Deals({ userRole }: DealsProps = {}) {
       )
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to move deal')
+    }
+  }
+
+  const handleLostSubmit = async (lostReason: string, competitorBrand: string) => {
+    if (!pendingLostDealId) return
+    try {
+      await api.patch(`/api/deals/${pendingLostDealId}/stage`, {
+        stage: 'lost',
+        lostReason,
+        competitorBrand,
+      })
+      setDeals((prev) =>
+        prev.map((d) => (d.id === pendingLostDealId ? { ...d, stage: 'lost' } : d))
+      )
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'เกิดข้อผิดพลาดในการปรับสถานะดีล')
     }
   }
 
@@ -310,6 +337,18 @@ export function Deals({ userRole }: DealsProps = {}) {
                           {formatCurrency(deal.expected_amount)}
                         </div>
                         <div className="kanban-card-rep">{deal.sales_rep_name}</div>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-secondary"
+                          style={{ marginTop: '8px', padding: '3px 8px', fontSize: '0.75rem', width: '100%', justifyContent: 'center' }}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setQuoteDeal(deal)
+                          }}
+                        >
+                          <FileText size={12} />
+                          <span>ใบเสนอราคา</span>
+                        </button>
                       </div>
                     </div>
                   ))
@@ -409,6 +448,29 @@ export function Deals({ userRole }: DealsProps = {}) {
             </form>
           </div>
         </div>
+      )}
+
+      {quoteDeal && (
+        <QuotationModal
+          open={!!quoteDeal}
+          onClose={() => setQuoteDeal(null)}
+          customer={{ name: quoteDeal.customer_name }}
+          deal={{
+            vehicleModel: quoteDeal.vehicle_model,
+            quantity: quoteDeal.quantity,
+            expectedAmount: quoteDeal.expected_amount,
+            notes: quoteDeal.notes,
+          }}
+          salesRepName={quoteDeal.sales_rep_name}
+        />
+      )}
+
+      {pendingLostDealId && (
+        <LostDealModal
+          open={!!pendingLostDealId}
+          onClose={() => setPendingLostDealId(null)}
+          onSubmit={handleLostSubmit}
+        />
       )}
     </div>
   )

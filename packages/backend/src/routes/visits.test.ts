@@ -46,6 +46,8 @@ function createDb() {
       segment TEXT NOT NULL DEFAULT 'B',
       assigned_to TEXT REFERENCES team_members(id),
       status TEXT NOT NULL DEFAULT 'active',
+        fleet_contract_expiry TEXT,
+        zone TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
     )
@@ -75,6 +77,9 @@ function createDb() {
       gps_lat REAL,
       gps_lng REAL,
       notes TEXT,
+        lost_reason TEXT,
+        competitor_brand TEXT,
+        discount_amount REAL,
       next_step TEXT,
       customer_mood TEXT,
       attachments TEXT,

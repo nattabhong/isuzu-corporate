@@ -3534,3 +3534,190 @@ body {
   margin: 0 !important;
   box-sizing: border-box !important;
 }
+
+/* ===== Quotation Modal & Print Styles ===== */
+.quotation-modal-card {
+  max-width: 850px;
+  width: 90%;
+  background: #ffffff;
+  padding: 24px;
+}
+
+.quotation-paper {
+  background: #fff;
+  color: #111827;
+  padding: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.quote-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.quote-brand {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.quote-logo {
+  max-height: 50px;
+  object-fit: contain;
+}
+
+.company-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.125rem;
+  color: #111827;
+}
+
+.company-info p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #4b5563;
+}
+
+.quote-doc-info {
+  text-align: right;
+}
+
+.quote-doc-info h2 {
+  margin: 0 0 12px 0;
+  color: #c62828;
+  font-size: 1.5rem;
+}
+
+.meta-table {
+  font-size: 0.8125rem;
+  margin-left: auto;
+}
+
+.meta-table td {
+  padding: 2px 6px;
+}
+
+.quote-customer-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.quote-customer-box h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9375rem;
+  color: #374151;
+}
+
+.customer-details p {
+  margin: 4px 0;
+  font-size: 0.875rem;
+  color: #1f2937;
+}
+
+.quote-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 0.875rem;
+}
+
+.quote-items-table th,
+.quote-items-table td {
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+}
+
+.quote-items-table th {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+}
+
+.quote-summary-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.quote-terms {
+  flex: 1;
+  font-size: 0.8125rem;
+  color: #4b5563;
+}
+
+.quote-terms h4 {
+  margin: 0 0 8px 0;
+  color: #111827;
+}
+
+.quote-terms ol {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.quote-totals {
+  width: 320px;
+}
+
+.totals-table {
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.totals-table td {
+  padding: 6px 8px;
+}
+
+.grand-total-row td {
+  font-size: 1rem;
+  color: #c62828;
+  border-top: 2px solid #e5e7eb;
+  padding-top: 10px;
+}
+
+.quote-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  padding-top: 20px;
+}
+
+.sig-box {
+  text-align: center;
+  width: 30%;
+  font-size: 0.8125rem;
+  color: #374151;
+}
+
+.sig-box p {
+  margin: 6px 0;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .quotation-paper, .quotation-paper * {
+    visibility: visible;
+  }
+  .quotation-paper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+    padding: 0;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
