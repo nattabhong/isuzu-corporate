@@ -25,14 +25,19 @@ async function safeFetchJson(path: string, options: RequestInit = {}) {
   }
 
   let res: Response
+  let text = ''
   try {
     res = await fetch(path, mergedOptions)
+    text = await res.text().catch(() => '')
+    if (text.startsWith('<!doctype') || text.startsWith('<html')) {
+      throw new Error('HTML response from SPA server')
+    }
   } catch {
-    const fullUrl = path.startsWith('/') ? `${API_BASE}${path}` : path
-    res = await fetch(fullUrl, mergedOptions)
+    const targetUrl = path.startsWith('/') ? `${API_BASE}${path}` : path
+    res = await fetch(targetUrl, mergedOptions)
+    text = await res.text().catch(() => '')
   }
 
-  const text = await res.text().catch(() => '')
   let data: any = null
   if (text) {
     try {
