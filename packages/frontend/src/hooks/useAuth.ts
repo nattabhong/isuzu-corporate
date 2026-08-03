@@ -10,7 +10,7 @@ export interface AuthUser {
   territory?: string
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || 'https://sala-corporate-api.nattabhong-kon.workers.dev'
+const API_BASE = import.meta.env.VITE_API_URL
 
 async function safeFetchJson(path: string, options: RequestInit = {}) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null
@@ -33,7 +33,8 @@ async function safeFetchJson(path: string, options: RequestInit = {}) {
       throw new Error('HTML response from SPA server')
     }
   } catch {
-    const targetUrl = path.startsWith('/') ? `${API_BASE}${path}` : path
+    const apiHost = API_BASE || 'https://sala-corporate-api.nattabhong-kon.workers.dev'
+    const targetUrl = path.startsWith('/') ? `${apiHost}${path}` : path
     res = await fetch(targetUrl, mergedOptions)
     text = await res.text().catch(() => '')
   }
