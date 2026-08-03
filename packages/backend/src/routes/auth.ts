@@ -135,7 +135,7 @@ authRoutes.post('/login', async (c) => {
 
     const { email, password } = parsed.data
     const db = resolveDb(c.env)
-    const normalizedEmail = email.toLowerCase()
+    const normalizedEmail = email.trim().toLowerCase()
 
     const rows = await db.select().from(teamMembers)
       .where(eq(teamMembers.email, normalizedEmail))
