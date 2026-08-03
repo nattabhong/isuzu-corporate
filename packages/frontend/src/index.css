@@ -3734,3 +3734,136 @@ body {
     display: none !important;
   }
 }
+
+/* ===== Monthly Calendar View Styles ===== */
+.view-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.view-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-mode-btn.active {
+  background: #ffffff;
+  color: var(--isuzu-red);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-view-container {
+  padding: 20px;
+}
+
+.calendar-header-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.calendar-header-day {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 8px 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-day-cell {
+  min-height: 100px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-day-cell:hover {
+  border-color: var(--isuzu-red);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-day-cell.empty {
+  background: #f9fafb;
+  border-color: #f3f4f6;
+  cursor: default;
+}
+
+.calendar-day-cell.is-today {
+  border: 2px solid var(--isuzu-red);
+  background: rgba(238, 27, 46, 0.02);
+}
+
+.calendar-day-number {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.calendar-visit-pill {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.calendar-visit-pill:hover {
+  transform: translateY(-1px);
+}
+
+.calendar-visit-pill.badge-planned {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-left: 3px solid #2563eb;
+}
+
+.calendar-visit-pill.badge-completed {
+  background: #f0fdf4;
+  color: #15803d;
+  border-left: 3px solid #16a34a;
+}
+
+.calendar-visit-pill.badge-missed {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-left: 3px solid #dc2626;
+}
+
+.calendar-visit-pill.badge-rescheduled {
+  background: #fffbebfb;
+  color: #b45309;
+  border-left: 3px solid #d97706;
+}

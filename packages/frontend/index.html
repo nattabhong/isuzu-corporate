@@ -20,21 +20,14 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        // Unregister any old service worker cache to ensure instant UI update
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
           for (let registration of registrations) {
             registration.unregister();
           }
         });
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js?v=' + Date.now()).then(
-            (registration) => {
-              registration.update();
-            }
-          ).catch((err) => {
-            console.log('SW registration error:', err)
-          })
-        })
+        caches.keys().then(function(names) {
+          for (let name of names) caches.delete(name);
+        });
       }
     </script>
   </body>

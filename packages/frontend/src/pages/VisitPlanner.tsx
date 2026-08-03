@@ -205,7 +205,7 @@ export function VisitPlanner({ userRole, initialPlans = [] }: VisitPlannerProps)
             />
           </div>
 
-          {userRole === 'manager' && (
+          {(userRole === 'manager' || userRole === 'admin') && (
             <div className="filter-group">
               <label htmlFor="rep-filter">เซลล์</label>
               <select
