@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from '../components/Layout'
 import { Overview } from './Overview'
+import { CalendarPage } from './CalendarPage'
 import { Customers } from './Customers'
 import { CustomerDetail } from './CustomerDetail'
 import { Visits } from './Visits'
@@ -22,6 +23,7 @@ export function Dashboard({ user, onLogout }: DashboardProps) {
       <Routes>
         <Route path="/" element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<Overview user={user} />} />
+        <Route path="/calendar" element={<CalendarPage userRole={user.role} />} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/customers/:id" element={<CustomerDetail />} />
         <Route path="/visits" element={<Visits userRole={user.role} />} />

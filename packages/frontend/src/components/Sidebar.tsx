@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Building2, MapPin, Phone, TrendingUp, BarChart3, Users, Settings } from 'lucide-react'
+import { LayoutDashboard, Calendar, Building2, MapPin, Phone, TrendingUp, BarChart3, Users, Settings } from 'lucide-react'
 
 interface SidebarProps {
   role: 'admin' | 'manager' | 'sales_rep'
@@ -7,8 +7,9 @@ interface SidebarProps {
 
 const commonItems = [
   { to: '/overview', label: 'ภาพรวม', icon: LayoutDashboard },
+  { to: '/calendar', label: 'ปฏิทิน', icon: Calendar },
   { to: '/customers', label: 'ลูกค้าองค์กร', icon: Building2 },
-  { to: '/visits', label: 'ปฏิทิน & Visit', icon: MapPin },
+  { to: '/visits', label: 'Visit', icon: MapPin },
   { to: '/calls', label: 'Call', icon: Phone },
   { to: '/deals', label: 'Pipeline', icon: TrendingUp },
 ]
@@ -20,7 +21,7 @@ const managerItems = [
 ]
 
 export function Sidebar({ role }: SidebarProps) {
-  const items = role === 'manager' ? [...commonItems, ...managerItems] : commonItems
+  const items = (role === 'manager' || role === 'admin') ? [...commonItems, ...managerItems] : commonItems
 
   return (
     <aside className="sidebar">
