@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { Calendar, Plus } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Calendar, Plus, Sparkles } from 'lucide-react'
 import { VisitForm, type VisitFormData, type CustomerOption } from '../components/VisitForm'
+import { fetchVisitPlans, fetchCustomers, generateVisitPlans, createVisitLog } from '../lib/api'
 
 export interface VisitPlanRow {
   id: string
@@ -44,23 +45,70 @@ function formatDate(dateStr: string): string {
   return `${day} ${month} ${year}`
 }
 
-// Sample customers for the form (in real app, fetched from API)
-const SAMPLE_CUSTOMERS: CustomerOption[] = [
-  { id: 'c1', name: 'บริษัท สยามยนต์ จำกัด' },
-  { id: 'c2', name: 'ห้างหุ้นส่วน เชียงใหม่ขนส่ง' },
-  { id: 'c3', name: 'บริษัท นอร์ทเทิร์นโลจิสติกส์' },
-  { id: 'c4', name: 'บริษัท ทรัพย์เจริญขนส่ง' },
-]
-
 export function VisitPlanner({ userRole, initialPlans = [] }: VisitPlannerProps) {
   const [month, setMonth] = useState(() => {
     const now = new Date()
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
   })
-  const [plans] = useState<VisitPlanRow[]>(initialPlans)
+  const [plans, setPlans] = useState<VisitPlanRow[]>(initialPlans)
+  const [customers, setCustomers] = useState<CustomerOption[]>([])
   const [salesRepFilter, setSalesRepFilter] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<VisitPlanRow | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [generating, setGenerating] = useState(false)
+
+  const loadData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const [fetchedPlans, fetchedCustomers] = await Promise.all([
+        fetchVisitPlans(month).catch(() => []),
+        fetchCustomers().catch(() => []),
+      ])
+
+      if (fetchedCustomers.length > 0) {
+        setCustomers(fetchedCustomers.map((c) => ({ id: c.id, name: c.name })))
+      }
+
+      if (fetchedPlans.length > 0) {
+        const custMap = new Map(fetchedCustomers.map((c) => [c.id, c.name]))
+        const mappedPlans: VisitPlanRow[] = fetchedPlans.map((p) => ({
+          id: p.id,
+          customerId: p.customerId,
+          salesRepId: p.salesRepId,
+          month: p.month,
+          plannedDate: p.plannedDate,
+          visitType: (p.visitType as any) || 'follow_up',
+          objective: p.objective ?? null,
+          status: p.status as VisitPlanRow['status'],
+          createdAt: p.createdAt,
+          customerName: custMap.get(p.customerId) || 'ลูกค้าทั่วไป',
+          salesRepName: 'พนักงานขาย',
+        }))
+        setPlans(mappedPlans)
+      } else if (initialPlans.length > 0) {
+        setPlans(initialPlans)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }, [month, initialPlans])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
+
+  const handleGeneratePlans = async () => {
+    setGenerating(true)
+    try {
+      await generateVisitPlans(month)
+      await loadData()
+    } catch (err) {
+      console.error('Failed to generate plans:', err)
+    } finally {
+      setGenerating(false)
+    }
+  }
 
   const filteredPlans = plans.filter((p) => {
     if (month && p.month !== month) return false
@@ -80,20 +128,43 @@ export function VisitPlanner({ userRole, initialPlans = [] }: VisitPlannerProps)
     setShowForm(true)
   }
 
-  const handleSave = (_data: VisitFormData) => {
-    // In production: POST /api/visit-logs
-    setShowForm(false)
-    setSelectedPlan(null)
+  const handleSave = async (data: VisitFormData) => {
+    try {
+      await createVisitLog({
+        visitPlanId: selectedPlan?.id,
+        customerId: data.customerId,
+        checkinAt: new Date().toISOString(),
+        notes: data.notes,
+      })
+      setShowForm(false)
+      setSelectedPlan(null)
+      loadData()
+    } catch (err) {
+      console.error('Failed to save visit log:', err)
+    }
   }
 
   return (
     <div className="page">
       <div className="page-header">
         <h1>แผนการเข้าพบลูกค้า</h1>
-        <button type="button" className="btn-primary" onClick={handleOpenNewForm}>
-          <Plus size={18} />
-          <span>บันทึก Visit</span>
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {(userRole === 'manager' || userRole === 'admin') && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleGeneratePlans}
+              disabled={generating}
+            >
+              <Sparkles size={16} />
+              <span>{generating ? 'กำลังสร้างแผน...' : 'สร้างแผนประจำเดือนออโต้'}</span>
+            </button>
+          )}
+          <button type="button" className="btn-primary" onClick={handleOpenNewForm}>
+            <Plus size={18} />
+            <span>บันทึก Visit</span>
+          </button>
+        </div>
       </div>
 
       <div className="filters-bar panel">
@@ -184,7 +255,7 @@ export function VisitPlanner({ userRole, initialPlans = [] }: VisitPlannerProps)
 
       {showForm && (
         <VisitForm
-          customers={SAMPLE_CUSTOMERS}
+          customers={customers}
           initialData={
             selectedPlan
               ? {

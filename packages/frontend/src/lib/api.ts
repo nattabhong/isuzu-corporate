@@ -102,12 +102,45 @@ export async function deleteContact(
   if (!res.success) throw new Error(res.error || 'Failed to delete contact')
 }
 
-// ===== Visit Plans =====
-
 export async function fetchVisitPlans(month?: string): Promise<VisitPlan[]> {
   const qs = month ? `?month=${month}` : ''
   const res = await api.get<ApiResponse<VisitPlan[]>>(`/api/visit-plans${qs}`)
   if (!res.success || !res.data) throw new Error(res.error || 'Failed to fetch visit plans')
+  return res.data
+}
+
+export async function createVisitPlan(data: {
+  customerId: string
+  salesRepId: string
+  month: string
+  plannedDate: string
+  visitType: string
+  objective?: string
+}): Promise<VisitPlan> {
+  const res = await api.post<ApiResponse<VisitPlan>>('/api/visit-plans', data)
+  if (!res.success || !res.data) throw new Error(res.error || 'Failed to create visit plan')
+  return res.data
+}
+
+export async function generateVisitPlans(month: string): Promise<VisitPlan[]> {
+  const res = await api.post<ApiResponse<VisitPlan[]>>('/api/visit-plans/generate', { month })
+  if (!res.success || !res.data) throw new Error(res.error || 'Failed to generate visit plans')
+  return res.data
+}
+
+export async function createVisitLog(data: {
+  visitPlanId?: string
+  customerId: string
+  checkinAt: string
+  checkinLat?: number
+  checkinLng?: number
+  notes?: string
+  mainTopics?: string[]
+  attachments?: string[]
+  nextActionDate?: string
+}): Promise<VisitLog> {
+  const res = await api.post<ApiResponse<VisitLog>>('/api/visit-logs', data)
+  if (!res.success || !res.data) throw new Error(res.error || 'Failed to record visit log')
   return res.data
 }
 
