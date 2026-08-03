@@ -3,7 +3,7 @@ import { useAuth } from './hooks/useAuth'
 import { Login } from './pages/Login'
 import { Dashboard } from './pages/Dashboard'
 
-export default function App() {
+function AppRoutes() {
   const { user, loading, login, lineLogin, register, logout } = useAuth()
 
   if (loading) {
@@ -15,14 +15,25 @@ export default function App() {
   }
 
   if (!user) {
-    return <Login onLogin={login} onLineLogin={lineLogin} onRegister={register} />
+    return (
+      <Routes>
+        <Route path="*" element={<Login onLogin={login} onLineLogin={lineLogin} onRegister={register} />} />
+      </Routes>
+    )
   }
 
   return (
+    <Routes>
+      <Route path="/login" element={<Navigate to="/calendar" replace />} />
+      <Route path="/*" element={<Dashboard user={user} onLogout={logout} />} />
+    </Routes>
+  )
+}
+
+export default function App() {
+  return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<Dashboard user={user} onLogout={logout} />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   )
 }

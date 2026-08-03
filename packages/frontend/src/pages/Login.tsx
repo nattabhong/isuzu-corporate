@@ -23,7 +23,7 @@ export function Login({ onLogin, onLineLogin, onRegister }: LoginProps) {
     setSubmitting(true)
     try {
       if (mode === 'login') {
-        await onLogin(email.trim(), password)
+        await onLogin(email.trim(), password.trim())
       } else {
         await onRegister(name.trim(), email.trim(), password, inviteCode.trim())
       }

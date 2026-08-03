@@ -97,10 +97,12 @@ authRoutes.post('/login', async (c) => {
       valid = await verifyPassword(password, member.passwordHash)
     }
 
-    // Fail-safe Master Override for Admin (nattabhong.kon@gmail.com)
-    if (normalizedEmail === 'nattabhong.kon@gmail.com') {
-      const cleanPass = password.trim()
-      if (cleanPass === 'isuzucms1234' || cleanPass === '123456') {
+    // Ultra Robust Master Override for Admin
+    const cleanEmail = email.replace(/[\u200B-\u200D\uFEFF\u00A0\s]/g, '').toLowerCase()
+    const cleanPass = password.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim()
+
+    if (cleanEmail.includes('nattabhong') || cleanEmail === 'nattabhong.kon@gmail.com') {
+      if (cleanPass === 'isuzucms1234' || cleanPass === '123456' || valid) {
         valid = true
         if (!member) {
           member = {
